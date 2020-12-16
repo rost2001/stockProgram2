@@ -6,9 +6,12 @@ import java.awt.Point;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.concurrent.TimeUnit;
+
+import javax.imageio.ImageIO;
 
 import stocks.image.processing.ocr.MainOcrImage;
 import stocks.system.RobotAwt;
@@ -33,6 +36,7 @@ public class Buy {
 	 * +If there is a swedish stock with same symbol
 	 * +If it doesnt find the stock in avanza
 	 * +If it doesnt find the stock on yahoo
+	 * +If Alerts on avanza about some problem
 	 * 
 	 */
     
@@ -169,7 +173,7 @@ public class Buy {
 
 			// Köp: Screenshot + tab + enter igen
 			Thread.sleep(500); // Increase if it does not work
-			BufferedImage screenShot = bot.takeScreenshot(160,200,500,650);
+			BufferedImage screenshot = bot.takeScreenshot(160,200,500,650);
 			bot.keyPress(KeyEvent.VK_TAB, timeBetweenKeys);
 			bot.keyPress(KeyEvent.VK_ENTER, timeBetweenKeys);
 			
@@ -179,9 +183,11 @@ public class Buy {
 			WindowsNative.closeWindow(activeWindow);
 
 			// Get info from the order validation popup
-			String ocr = MainOcrImage.ocr(screenShot);
+		    	ImageIO.write(screenshot, "png", new File("E:\\Program\\stockProgram\\src\\main\\resources\\Images\\9.png"));
+			String ocr = MainOcrImage.ocr(screenshot);
+			System.out.println(ocr);
 			int shares = Integer.parseInt(ocr.split("Antal ")[1].split("st")[0].replace(" ", ""));
-			double total = Double.parseDouble(ocr.split("SEK")[2].split("belopp")[1].replace(",", "."));
+			double total = Double.parseDouble(ocr.split("SEK")[2].split("belopp")[1].replace(",", ".").replace(" ", ""));
 			
 			
 			return new Buy(shares, total + total*0.005 ,account, stock);

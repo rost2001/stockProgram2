@@ -6,9 +6,12 @@ import java.awt.Point;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.concurrent.TimeUnit;
+
+import javax.imageio.ImageIO;
 
 import org.awaitility.Awaitility;
 
@@ -138,7 +141,7 @@ public class Sell {
 
 		// Sell: Screenshot + tab + enter igen
 		Thread.sleep(500); // Increase if it does not work
-		BufferedImage screenShot = bot.takeScreenshot(160,200,500,650);
+		BufferedImage screenshot = bot.takeScreenshot(160,200,500,650);
 		bot.keyPress(KeyEvent.VK_TAB, timeBetweenKeys);
 		bot.keyPress(KeyEvent.VK_ENTER, timeBetweenKeys);
 		
@@ -148,11 +151,14 @@ public class Sell {
 		WindowsNative.closeWindow(activeWindow);
 		
 		// Get info from the order validation popup
-		String ocr = MainOcrImage.ocr(screenShot);
-		double total = Double.parseDouble(ocr.split("SEK")[2].split("belopp")[1].replace(",", "."));
+	    	ImageIO.write(screenshot, "png", new File("E:\\Program\\stockProgram\\src\\main\\resources\\Images\\9.png"));
+		String ocr = MainOcrImage.ocr(screenshot);
+		System.out.println(ocr);
+		double total = Double.parseDouble(ocr.split("SEK")[2].split("belopp")[1].replace(",", ".").replace(" ", ""));
 		
 		return new Sell(total);
 		} catch (IOException | InterruptedException | AWTException e) {
+		    
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

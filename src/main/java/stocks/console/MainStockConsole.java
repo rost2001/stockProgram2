@@ -19,6 +19,13 @@ import stocks.StockInfo;
 import stocks.interfaces.ScheduledTasksListener;
 import yahoofinance.Stock;
 
+/* TODO:
+ * Custom buy orders in beginning
+ * Swedish support
+ * Custom price sell
+ * Acoount overview in beginning, and existing orders overview
+ * 
+ */
 
 public class MainStockConsole implements ScheduledTasksListener, NativeKeyListener {
 
@@ -144,7 +151,7 @@ public class MainStockConsole implements ScheduledTasksListener, NativeKeyListen
 	    System.out.println("|Robot Stock Program 1");
 	    System.out.println("|Profit: " + String.format("%.0f", profit) + " SEK");
 	    System.out.println("|Accumulated fees: " + String.format("%.0f", fees) + " SEK"); // Rounds to 0 decimals
-	    System.out.println("|Hotkeys on/off: ctrl + alt + K");
+	    System.out.println("|Show Hotkeys on/off: ctrl + alt + K");
 	    System.out.println("|__________________________________");
 
 	    if(hotkeysOn) {
@@ -172,8 +179,9 @@ public class MainStockConsole implements ScheduledTasksListener, NativeKeyListen
 	    for (int i = 0; i < buys.size(); i++) {
 
 		System.out.println("|__________________________________");
-		System.out.println("|Buy order: #" + i + "   (Completed)");
+		System.out.println("|Buy order: #" + (i+1) + "   (Completed)");
 		System.out.println("|Symbol: " + buys.get(i).stock);
+		//System.out.println("|Total: " + buys.get(i).total + " SEK");
 		System.out.println("|Shares: " + buys.get(i).shares + "st");
 		System.out.println("|account: #" + buys.get(i).account);
 		System.out.println("|__________________________________");
@@ -189,7 +197,7 @@ public class MainStockConsole implements ScheduledTasksListener, NativeKeyListen
 	public void onNewPrice(Stock stock) {
 
 	    // Two ways of accessing the object stock
-	    System.out.print("\r" + stockInfo.getStock() + "                     ");
+	    System.out.print("\r" + stockInfo.getStock() + "                  ");
 	    // or
 	    // System.out.println(stock);
 
@@ -198,7 +206,7 @@ public class MainStockConsole implements ScheduledTasksListener, NativeKeyListen
 	@Override
 	public void onNewTradingviewWindow(Stock stock) {
 
-		System.out.print("\rStock: " + stockInfo.getStock() + "                     ");
+		System.out.print("\rStock: " + stockInfo.getStock() + "                  ");
 		// or
 		// System.out.println("New Stock: " + stock);
 
