@@ -171,7 +171,7 @@ public class Buy {
 			Thread.sleep(500); // Increase if it does not work
 			BufferedImage screenShot = bot.takeScreenshot(160,200,500,650);
 			bot.keyPress(KeyEvent.VK_TAB, timeBetweenKeys);
-			//bot.keyPress(KeyEvent.VK_ENTER, timeBetweenKeys);
+			bot.keyPress(KeyEvent.VK_ENTER, timeBetweenKeys);
 			
 			// Close window afterwards
 			HWND activeWindow = WindowsNative.getActiveWindow();
