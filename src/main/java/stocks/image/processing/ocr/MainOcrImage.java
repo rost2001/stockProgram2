@@ -1,8 +1,10 @@
 package stocks.image.processing.ocr;
+import java.awt.image.BufferedImage;
 import java.io.File;
 
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
+import net.sourceforge.tess4j.util.LoadLibs;
 
 public class MainOcrImage {
 	
@@ -22,12 +24,18 @@ public class MainOcrImage {
 		// and other image processing before using ocr on the image
 
 
-			 Tesseract tesseract = new Tesseract();
-			tesseract.setTessVariable("user_defined_dpi", "300");
+			Tesseract tesseract = new Tesseract();
+
+			tesseract.setTessVariable("user_defined_dpi", "70");
 			 try {
 				tesseract.setDatapath("src\\main\\resources\\tessdata");
-				String text = tesseract.doOCR(new File("src\\main\\resources\\Images\\33.png"));	
+				String text = tesseract.doOCR(new File("src\\main\\resources\\Images\\34.png"));
 				
+				
+				    File tessDataFolder = LoadLibs.extractTessResources("tessdata");
+
+				    //Set the tessdata path
+				    tesseract.setDatapath(tessDataFolder.getAbsolutePath());
 				
 				System.out.print(text);
 				
@@ -38,6 +46,30 @@ public class MainOcrImage {
 		 
 		
 
+	}
+	
+	
+	public static String ocr(BufferedImage image) {
+		 Tesseract tesseract = new Tesseract();
+		tesseract.setTessVariable("user_defined_dpi", "70");
+		 try {
+			//tesseract.setDatapath("src\\main\\resources\\tessdata");
+			    File tessDataFolder = LoadLibs.extractTessResources("tessdata");
+
+			    //Set the tessdata path
+			    tesseract.setDatapath(tessDataFolder.getAbsolutePath());
+			String text = tesseract.doOCR(image);
+			
+			
+
+			
+			return text;
+		 } catch (TesseractException e) {
+			e.printStackTrace();
+		}
+		return null;
+
+	    
 	}
 
 }

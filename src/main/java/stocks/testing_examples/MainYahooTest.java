@@ -34,8 +34,6 @@ public class MainYahooTest {
 		stock.print();
 		System.out.println("***** " + elapsedTime0/1000000 + " ms");
 		
-	
-	
 		
 		//BigDecimal price = stock.getQuote().getPrice();
 		//stock.print();

@@ -22,6 +22,7 @@ public class RobotAwt extends java.awt.Robot {
 	public void keyPress(int keyEvent, int delay) throws InterruptedException {
 
 		keyPress(keyEvent);
+		keyRelease(keyEvent);
 		Thread.sleep(delay);
 	}
 
@@ -54,8 +55,8 @@ public class RobotAwt extends java.awt.Robot {
 	}
 
 	// If not wanting a sub image
-	public void takeScreenshot() throws InterruptedException, AWTException {
-		takeScreenshot(-1, -1, -1, -1);
+	public BufferedImage takeScreenshot() throws InterruptedException, AWTException {
+		return takeScreenshot(-1, -1, -1, -1);
 	}
 
 }

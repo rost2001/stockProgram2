@@ -5,6 +5,8 @@ package stocks.system;
 import static stocks.system.WindowsNative.User32DLL.*;
 
 import com.sun.jna.Native;
+import com.sun.jna.platform.win32.User32;
+import com.sun.jna.platform.win32.WinDef;
 import com.sun.jna.platform.win32.WinDef.HWND;
 import com.sun.jna.ptr.PointerByReference;
 
@@ -12,7 +14,6 @@ import com.sun.jna.ptr.PointerByReference;
 public class WindowsNative {
 	
 	private static final int MAX_TITLE_LENGTH = 1024;
-	
 
 
 		// https://stackoverflow.com/questions/6391439/getting-active-window-information-in-java
@@ -24,8 +25,20 @@ public class WindowsNative {
 		
 		char[] buffer = new char[MAX_TITLE_LENGTH * 2];
         GetWindowTextW(GetForegroundWindow(), buffer, MAX_TITLE_LENGTH);
-		
+        
 		return String.valueOf(buffer);
+	}
+	
+	public static HWND getActiveWindow() {
+
+		return GetForegroundWindow();
+	}
+	
+	
+	public static void closeWindow(HWND window) {
+        // info: https://stackoverflow.com/questions/955248/is-it-possible-to-end-a-process-nicely-in-a-java-application
+        int WM_CLOSE = 0x10;
+        User32.INSTANCE.PostMessage(window, WM_CLOSE, new WinDef.WPARAM(), new WinDef.LPARAM());
 	}
 	
 	
