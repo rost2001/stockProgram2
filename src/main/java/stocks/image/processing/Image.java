@@ -1,6 +1,14 @@
 package stocks.image.processing;
 
+import java.awt.AWTException;
+import java.awt.Color;
+import java.awt.MouseInfo;
+import java.awt.Point;
 import java.awt.image.BufferedImage;
+import java.math.BigDecimal;
+
+import stocks.image.processing.ocr.MainOcrImage;
+import stocks.system.RobotAwt;
 
 
 
@@ -8,6 +16,7 @@ import java.awt.image.BufferedImage;
 // A class for processing Image files or bufferedimages and holding related info
 public class Image {
 	
+    
 	
     	// Crops an image out of the base image between 2 other smaller images horizontally
     	public static BufferedImage cropBetweenImagesHorizontal(BufferedImage baseImg, BufferedImage img1, BufferedImage img2) {

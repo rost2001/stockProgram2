@@ -1,8 +1,10 @@
 package stocks;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Timer;
 import java.util.TimerTask;
+import com.sun.jna.platform.win32.WinDef.HWND;
 
 import stocks.interfaces.ScheduledTasksListener;
 import stocks.system.WindowsNative;
@@ -16,6 +18,8 @@ public class StockInfo {
     private Timer t = null;
     private TimerTask tt1 = null;
     private TimerTask tt2 = null;
+    private boolean tradingviewData = false;
+    private String tradingviewTitle;
 
     private Stock stock;
     ScheduledTasksListener stl;
@@ -36,6 +40,11 @@ public class StockInfo {
     public Stock getStock() {
 	return stock;
     }
+    
+    // Turns on to get data from tradinview instead
+    public void setTradingviewData(boolean trueFalse) {
+	tradingviewData = trueFalse;
+    }
 
     // Checks every *ms if price has changed and updates price
     public void updatePrice(int time) {
@@ -47,18 +56,31 @@ public class StockInfo {
 	    @Override
 	    public void run() {
 
-		if (stock != null) {
+		if (stock != null && tradingviewTitle != null) {
 		    double currentPrice = stock.getQuote().getPrice().doubleValue();
 		    // getQuote(stock);
 		    try {
-			stock.getQuote(true);
+			if (tradingviewData) {
+			    // Difference of chorme window and desktop tradingview app
+			    if (tradingviewTitle.contains("Chrome")) 
+				    stock.getQuote().setPrice(new BigDecimal(tradingviewTitle.split(" ")[1]));
+			    else // Desktop app
+				    stock.getQuote().setPrice(new BigDecimal(tradingviewTitle.split(" ")[3]));
+
+			// Yahoo data
+			} else {
+			    stock.getQuote(true);
+			}
+
+			
 		    } catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		    }
-		    if (currentPrice != stock.getQuote().getPrice().doubleValue())
+		    if (currentPrice != stock.getQuote().getPrice().doubleValue()) {
 
 			stl.onNewPrice(stock); // if want to do more on price update
+		    }
 		}
 
 	    };
@@ -78,9 +100,10 @@ public class StockInfo {
 	    @Override
 	    public void run() {
 
-		String windowTitle = WindowsNative.getActiveWindowTitle();
+		HWND activeWindow = WindowsNative.getActiveWindow();
+		String windowTitle = WindowsNative.getActiveWindowTitle(activeWindow);
 
-		if (windowTitle.contains("% Unnamed") && windowTitle.contains("Chrome")) {
+		if (windowTitle.contains("% Unnamed") || windowTitle.contains("% / Unnamed")) {
 
 		    if (stock == null || !stock.getSymbol().contains(windowTitle.split(" ")[0])) {
 			try {
@@ -93,6 +116,12 @@ public class StockInfo {
 			stl.onNewTradingviewWindow(stock); // If want to do more on new tradingview window
 
 		    }
+		    
+		    // If tradingview window, store it so it can be used later to update price
+		    if (windowTitle.contains("% / Unnamed") || windowTitle.contains("% Unnamed")) {
+			tradingviewTitle = windowTitle;
+		    }
+		    
 		}
 	    };
 	};

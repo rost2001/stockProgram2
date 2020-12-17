@@ -1,6 +1,12 @@
 package stocks.console;
 
+import java.awt.AWTException;
+import java.awt.Color;
+import java.awt.MouseInfo;
+import java.awt.Point;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -16,7 +22,9 @@ import org.jnativehook.keyboard.NativeKeyListener;
 import stocks.Buy;
 import stocks.Sell;
 import stocks.StockInfo;
+import stocks.image.processing.ocr.MainOcrImage;
 import stocks.interfaces.ScheduledTasksListener;
+import stocks.system.RobotAwt;
 import yahoofinance.Stock;
 
 /* TODO:
@@ -24,7 +32,7 @@ import yahoofinance.Stock;
  * Swedish support
  * Custom price sell
  * Acoount overview in beginning, and existing orders overview
- * 
+ * https://devalpha.io/
  */
 
 public class MainStockConsole implements ScheduledTasksListener, NativeKeyListener {
@@ -97,14 +105,17 @@ public class MainStockConsole implements ScheduledTasksListener, NativeKeyListen
 		    sc.next();
 		}
 		capital = sc.nextInt();
+		
+		
+		System.out.println("|Use data from the tradingview window instead of yahoo?");
+		String tradingviewDataOnOff = "";
+		do {
 
-		/*
+		    System.out.println("\"y\" or \"n\"");
 
-		System.out.print("|Starting Symbol?: leave blank for none");
-		symbol = sc.nextLine();
-
-*/
-		System.out.println("|___________________________________");
+		tradingviewDataOnOff = sc.next();
+		} while(!tradingviewDataOnOff.matches("y|n|Y|N"));
+		
 
 		sc.close();
 
@@ -115,8 +126,19 @@ public class MainStockConsole implements ScheduledTasksListener, NativeKeyListen
 
         
 		stockInfo = new StockInfo(new MainStockConsole(), symbol.toUpperCase());
-		stockInfo.updatePrice(200);
-		stockInfo.updateStockWindow(200);
+		
+		int updateTime = 0;
+
+		
+		if(tradingviewDataOnOff.matches("y|Y")) {
+		    updateTime = 10; stockInfo.setTradingviewData(true);
+		}else {
+		    updateTime = 200;
+		}
+		
+		System.out.println(updateTime);
+		stockInfo.updatePrice(updateTime);
+		stockInfo.updateStockWindow(updateTime);
 
 		
 		/*
@@ -134,14 +156,14 @@ public class MainStockConsole implements ScheduledTasksListener, NativeKeyListen
 */
 	    }
 	
-	static ProcessBuilder p = new ProcessBuilder("cmd", "/c", "cls");
+
 	static void consoleRefresh(){
 
 	
 	    // refreshes console by new lines, in case if one does not use cmd
 	 //   System.out.print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
 	    try {
-		p.inheritIO().start().waitFor();
+		new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
 	    } catch (InterruptedException | IOException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
@@ -211,11 +233,41 @@ public class MainStockConsole implements ScheduledTasksListener, NativeKeyListen
 		// System.out.println("New Stock: " + stock);
 
 	}
+	
+	public static BigDecimal getPriceAtMouse()  {
+	    	Point mouseInfo = MouseInfo.getPointerInfo().getLocation();
+	    	int x = mouseInfo.x;
+	    	int y = mouseInfo.y;
+	    	
+	    	RobotAwt bot;
+	    	BufferedImage screenshot = null;
+		try {
+		    bot = new RobotAwt();
+		    screenshot = bot.takeScreenshot();
+		} catch (AWTException | InterruptedException e) {
+		    // TODO Auto-generated catch block
+		    e.printStackTrace();
+		}
+
+	    	
+	    	for (; x < screenshot.getWidth(); x++) {
+	    	    
+	    	    if (screenshot.getRGB(x, y) == new Color(76,82,94).getRGB()) {
+	    		// subimage where the price label box is and ocr
+	    		String ocr = MainOcrImage.ocr(screenshot.getSubimage(x, y-8, 60, 17));
+	    	
+		    	return new BigDecimal(ocr.split("-")[1].replace(" ", "").replace("\n", ""));
+	    	    }
+	    	    
+	    	}
+		return null;
+	}
 
 	// --------------------------------------------------------
 	// NativeKeyListener:
 	boolean altPressed = false;
 	boolean ctrlPressed = false;
+	boolean dPressed = false;
 
 	@Override
 	public void nativeKeyPressed(NativeKeyEvent e) {
@@ -223,6 +275,8 @@ public class MainStockConsole implements ScheduledTasksListener, NativeKeyListen
 			altPressed = true;
 		if (e.getKeyCode() == NativeKeyEvent.VC_CONTROL)
 			ctrlPressed = true;
+		if (e.getKeyCode() == NativeKeyEvent.VC_D)
+			dPressed = true;
 		
 		
 		if (ctrlPressed == true && e.getKeyCode() == NativeKeyEvent.VC_N)
@@ -239,21 +293,17 @@ public class MainStockConsole implements ScheduledTasksListener, NativeKeyListen
 		
 		// Sell a registered buy
 		if (altPressed == true 
-			&& ( e.getKeyCode() == NativeKeyEvent.VC_1
-			|| e.getKeyCode() == NativeKeyEvent.VC_2
-			|| e.getKeyCode() == NativeKeyEvent.VC_3
-			|| e.getKeyCode() == NativeKeyEvent.VC_4
-			|| e.getKeyCode() == NativeKeyEvent.VC_5
-			|| e.getKeyCode() == NativeKeyEvent.VC_6
-			|| e.getKeyCode() == NativeKeyEvent.VC_7
-			|| e.getKeyCode() == NativeKeyEvent.VC_8
-			|| e.getKeyCode() == NativeKeyEvent.VC_9)
+			&& ( e.getKeyCode() >= 2 && e.getKeyCode() <= 10)
 			) {
 		    
 		    	// keycodes are 1 more than index in value, like VC_1 has 0x02 in hexa, so -1
 		    	// and the first buy in the list has an index of 0 but corresponds to alt + 1, so another -1 to match
 		    	int index = e.getKeyCode()-2;
-		    
+		    	
+		    	// If "V" is also pressed then it should sell instead at the mouse position price
+		    	if(dPressed)
+		    	    buys.get(index).stock.getQuote().setPrice(getPriceAtMouse());
+		    	
 		    	if (index < buys.size()) { // checks if trying to sell something that doesnt exist
 		        sell = Sell.sellUsingNewWindow(buys.get(index)); 
 		        profit += sell.total - buys.get(index).total;
@@ -262,7 +312,7 @@ public class MainStockConsole implements ScheduledTasksListener, NativeKeyListen
 		    	consoleRefresh();
 		    	}
 		}
-
+		
 		
 		// Increment capital to invest 500, max last even 500 before total capital in account
 		if (altPressed == true && ctrlPressed == true && e.getKeyCode() == NativeKeyEvent.VC_A) {
@@ -321,6 +371,8 @@ public class MainStockConsole implements ScheduledTasksListener, NativeKeyListen
 			altPressed = false;
 		if (e.getKeyCode() == NativeKeyEvent.VC_CONTROL)
 			ctrlPressed = false;
+		if (e.getKeyCode() == NativeKeyEvent.VC_D)
+			dPressed = false;
 	}
 
 	@Override

@@ -2,6 +2,7 @@ package stocks.testing_examples;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Scanner;
 
 import yahoofinance.Stock;
 import yahoofinance.YahooFinance;
@@ -71,6 +72,7 @@ public class MainYahooTest {
 		
 		System.out.println(stock.getQuote().getSymbol());
 		System.out.println(stock.getQuote());
+
 		
 	}
 

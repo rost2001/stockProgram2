@@ -5,11 +5,12 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.imageio.ImageIO;
 
+import stocks.image.processing.Image;
 import stocks.image.processing.ocr.MainOcrImage;
 
 public class MainTesting {
@@ -77,7 +78,7 @@ public class MainTesting {
 		
 		String ocr = null;
 		List<Long> duration = new ArrayList<Long>();
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < 1; i++) {
 		long startTime = System.nanoTime();
 		
 	    	ocr = MainOcrImage.ocr(img2.getSubimage(140, 140, 500, 600));
@@ -117,40 +118,15 @@ public class MainTesting {
 	        double input = 3.14159265359;
 	        System.out.println("double : " + input);
 	        System.out.println("double : " + String.format("%.2f", input));
-	        System.out.format("double : %.0f", input);
-		
-	    	/*
-	    	int n = 0;
-	    	System.out.println(n);
-	    	changeN(n);
-	    	System.out.println(n);
-	    	
-	    	int n2[] = {0, 1};
-	    	System.out.println(n2[0] +" " + n2[1]);
-	    	changeN2(n2);
-	    	System.out.println(n2[0] +" " + n2[1]);
-	    */
+	        System.out.format("double : %.0f \n", input);
+	        
+	        
+
+		    
+		}
+
 	    }
 
-		@SuppressWarnings("unused")
-		private static void changeN2(int[] n2) {
-			// I can never change the thing it self so that it also changes outside of the method scope
-			// but I can change whats inside of the thing and then it will also have changed outside of the method scope
-			
-			//n2 = new int[]{1, 1}; // doesnt work
-			
-			n2[0] = 1; // does work
-			
-			
-			// As to why 
-			//https://softwareengineering.stackexchange.com/questions/286008/parameters-are-passed-by-value-but-editing-them-will-edit-the-actual-object-li
-			
-		}
 
-		@SuppressWarnings("unused")
-		private static void changeN(int n) {
-			n = 1;
-			
-		}
 
-}
+

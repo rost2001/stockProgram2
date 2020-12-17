@@ -21,13 +21,15 @@ public class WindowsNative {
 
 
   
-	public static String getActiveWindowTitle() {
+
+	public static String getActiveWindowTitle(HWND window) {
 		
 		char[] buffer = new char[MAX_TITLE_LENGTH * 2];
-        GetWindowTextW(GetForegroundWindow(), buffer, MAX_TITLE_LENGTH);
+        GetWindowTextW(window, buffer, MAX_TITLE_LENGTH);
         
 		return String.valueOf(buffer);
 	}
+	
 	
 	public static HWND getActiveWindow() {
 

@@ -74,15 +74,14 @@ public class Sell {
 			do {
 				continue;
 
-			} while (!WindowsNative.getActiveWindowTitle().split("\\?")[0]
+			} while (!WindowsNative.getActiveWindowTitle(WindowsNative.getActiveWindow()).split("\\?")[0]
 					.contains("https://www.avanza.se/ab/sok/inline"));
 
 			return true;
 		});
 		
 		
-		// System.out.println(windowTitle.split("\\?")[0]);
-		// System.out.println(windowTitle);
+
 
 		// 3 tabs + enter
 		bot.keyPress(KeyEvent.VK_TAB, timeBetweenKeys);
@@ -97,13 +96,12 @@ public class Sell {
 			do {
 				continue;
 
-			} while (WindowsNative.getActiveWindowTitle().split("\\|").length != 3
-					|| !WindowsNative.getActiveWindowTitle().split("\\|")[2].contains(" Avanza"));
+			} while (WindowsNative.getActiveWindowTitle(WindowsNative.getActiveWindow()).split("\\|").length != 3
+					|| !WindowsNative.getActiveWindowTitle(WindowsNative.getActiveWindow()).split("\\|")[2].contains(" Avanza"));
 
 			return true;
 		});
-		// System.out.println(windowTitle.split("\\|")[2]);
-		// System.out.println(windowTitle);
+
 
 		// 20 tabs + enter
 		for (int i = 0; i < 20; i++) {

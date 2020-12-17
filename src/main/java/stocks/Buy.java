@@ -86,20 +86,18 @@ public class Buy {
 		    	// Increase to increase compatibility with lag/slow computer
 			int timeBetweenKeys = 10;
 
-			//windowTitle = WindowsNative.getActiveWindowTitle();
 			// Get windows title and wait for window to load until it is correct one
 			Awaitility.await().atMost(10, TimeUnit.SECONDS).until(() -> {
 				do {
 					continue;
 
-				} while (!WindowsNative.getActiveWindowTitle().split("\\?")[0]
+				} while (!WindowsNative.getActiveWindowTitle(WindowsNative.getActiveWindow()).split("\\?")[0]
 						.contains("https://www.avanza.se/ab/sok/inline"));
 
 				return true;
 			});
-			// System.out.println(windowTitle.split("\\?")[0]);
-			// System.out.println(windowTitle);
 
+			
 			// 2 tabs + enter
 			bot.keyPress(KeyEvent.VK_TAB, timeBetweenKeys);
 			bot.keyPress(KeyEvent.VK_TAB, timeBetweenKeys);
@@ -112,8 +110,8 @@ public class Buy {
 				do {
 					continue;
 
-				} while (WindowsNative.getActiveWindowTitle().split("\\|").length != 3
-						|| !WindowsNative.getActiveWindowTitle().split("\\|")[2].contains(" Avanza"));
+				} while (WindowsNative.getActiveWindowTitle(WindowsNative.getActiveWindow()).split("\\|").length != 3
+						|| !WindowsNative.getActiveWindowTitle(WindowsNative.getActiveWindow()).split("\\|")[2].contains(" Avanza"));
 
 				return true;
 			});
