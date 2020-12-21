@@ -5,17 +5,48 @@ import java.awt.Color;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
-import java.math.BigDecimal;
 
 import stocks.image.processing.ocr.MainOcrImage;
 import stocks.system.RobotAwt;
 
 
 
-// not completely functioning
-// A class for processing Image files or bufferedimages and holding related info
+// Currently a Class for doing stuff with images
 public class Image {
 	
+    
+
+    
+    
+	
+	public static double getPriceAtMouse()  {
+	    	Point mouseInfo = MouseInfo.getPointerInfo().getLocation();
+	    	int x = mouseInfo.x;
+	    	int y = mouseInfo.y;
+	    	
+	    	RobotAwt bot;
+	    	BufferedImage screenshot = null;
+		try {
+		    bot = new RobotAwt();
+		    screenshot = bot.takeScreenshot();
+		} catch (AWTException | InterruptedException e) {
+		    // TODO Auto-generated catch block
+		    e.printStackTrace();
+		}
+
+	    	
+	    	for (; x < screenshot.getWidth(); x++) {
+	    	    
+	    	    if (screenshot.getRGB(x, y) == new Color(76,82,94).getRGB()) {
+	    		// subimage where the price label box is and ocr
+	    		String ocr = MainOcrImage.ocr(screenshot.getSubimage(x, y-10, 60, 17));
+	    	
+		    	return Double.parseDouble(ocr.split("-")[1].replace(" ", "").replace("\n", ""));
+	    	    }
+	    	    
+	    	}
+		return -1;
+	}
     
 	
     	// Crops an image out of the base image between 2 other smaller images horizontally

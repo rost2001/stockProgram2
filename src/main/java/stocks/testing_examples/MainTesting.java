@@ -5,12 +5,10 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.imageio.ImageIO;
 
-import stocks.image.processing.Image;
 import stocks.image.processing.ocr.MainOcrImage;
 
 public class MainTesting {
@@ -72,7 +70,6 @@ public class MainTesting {
 		stdin.close();
 		p.waitFor();
 		
-		
 
 		BufferedImage img2 = ImageIO.read(new File("src\\main\\resources\\testing\\Images\\test3.png"));
 		
@@ -119,10 +116,9 @@ public class MainTesting {
 	        System.out.println("double : " + input);
 	        System.out.println("double : " + String.format("%.2f", input));
 	        System.out.format("double : %.0f \n", input);
+	 
 	        
 	        
-
-		    
 		}
 
 	    }

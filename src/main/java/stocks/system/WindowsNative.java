@@ -19,8 +19,8 @@ public class WindowsNative {
 		// https://stackoverflow.com/questions/6391439/getting-active-window-information-in-java
 		// https://stackoverflow.com/questions/18900736/what-are-native-methods-in-java-and-where-should-they-be-used
 
-
-  
+		// https://stackoverflow.com/questions/58026937/how-do-i-read-the-contents-from-an-open-windows-console-command-prompt-using-j
+		// https://stackoverflow.com/questions/56542792/sending-keystrokes-to-hidden-window-via-jna
 
 	public static String getActiveWindowTitle(HWND window) {
 		

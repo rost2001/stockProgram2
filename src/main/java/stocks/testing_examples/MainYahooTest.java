@@ -1,8 +1,8 @@
 package stocks.testing_examples;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.List;
 
 import yahoofinance.Stock;
 import yahoofinance.YahooFinance;
@@ -19,14 +19,6 @@ public class MainYahooTest {
 		// Disable slf4j Logging, info: https://stackoverflow.com/questions/14544991/how-to-configure-slf4j-simple
 		System.setProperty(org.slf4j.impl.SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "ERROR");
 
-		
-		String str= "SNDL";
-		Process p = Runtime.getRuntime().exec("cmd");
-		 PrintWriter stdin = new PrintWriter(p.getOutputStream());
-	        stdin.println("start chrome --app=https://www.avanza.se/ab/sok/inline?query=" + str + "");
-	        stdin.close();
-	        p.waitFor();
-		
 		
 	        
 	        long startTime0 = System.nanoTime();
@@ -51,6 +43,7 @@ public class MainYahooTest {
 		long startTime2 = System.nanoTime();
 		
 		stock = YahooFinance.get("JAGX");
+	
 		
 		
 		long elapsedTime2 = System.nanoTime() - startTime2;
@@ -73,6 +66,30 @@ public class MainYahooTest {
 		System.out.println(stock.getQuote().getSymbol());
 		System.out.println(stock.getQuote());
 
+		/////////////////////////////////////
+		
+		System.out.println("________________________________________\n\n");
+		Stock stock2 = YahooFinance.get("AAPL"); 
+		
+		System.out.println(stock2);
+		stock2.print();
+
+
+		
+
+
+		
+		System.out.println();
+
+		String str1 = "SNDL";
+		String str2 = "AAPL";
+		
+		
+		stocks.Stock stock3 = new stocks.Stock("MREO");
+		stocks.Stock stock4 = new stocks.Stock("ZSAN");
+		
+		System.out.println(stock3.price);
+		System.out.println(stock4.price);
 		
 	}
 
