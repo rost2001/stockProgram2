@@ -1,9 +1,15 @@
 package stocks.testing_examples;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.imageio.ImageIO;
+
+import stocks.image.processing.Image;
+import stocks.image.processing.ocr.MainOcrImage;
 import yahoofinance.Stock;
 import yahoofinance.YahooFinance;
 
@@ -19,7 +25,7 @@ public class MainYahooTest {
 		// Disable slf4j Logging, info: https://stackoverflow.com/questions/14544991/how-to-configure-slf4j-simple
 		System.setProperty(org.slf4j.impl.SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "ERROR");
 
-		
+		/*
 	        
 	        long startTime0 = System.nanoTime();
 		stock = YahooFinance.get("AAPL"); // Only first time takes long
@@ -74,23 +80,18 @@ public class MainYahooTest {
 		System.out.println(stock2);
 		stock2.print();
 
+		*/
+		Thread.sleep(2000);
+		
+	    	//BufferedImage img3 = ImageIO.read(new File("src\\main\\resources\\Images\\0.png"));
+	    	
+	    //	System.out.print("2:" + MainOcrImage.ocr(img3));
 
-		
+		System.out.println(Image.getPriceAtMouse());
 
-
-		
-		System.out.println();
-
-		String str1 = "SNDL";
-		String str2 = "AAPL";
-		
-		
-		stocks.Stock stock3 = new stocks.Stock("MREO");
-		stocks.Stock stock4 = new stocks.Stock("ZSAN");
-		
-		System.out.println(stock3.price);
-		System.out.println(stock4.price);
-		
+	    	BufferedImage img4 = ImageIO.read(new File("src\\main\\resources\\Images\\0.png"));
+	    	
+	    	System.out.print(MainOcrImage.ocr(img4));
 	}
 
 }

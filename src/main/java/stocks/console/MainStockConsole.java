@@ -180,6 +180,8 @@ public class MainStockConsole implements StockStateListener, NativeKeyListener {
 	System.out.println("|Capital to invest: " + overview.investmentCapital);
 	System.out.println("|Account: " + "#" + overview.account);
 	System.out.println("|__________________________________");
+	System.out.println("|Positions: " + overview.positions.size());
+	System.out.println("|__________________________________");
 
 	for (int i = 0; i < overview.positions.size(); i++) {
 
@@ -187,7 +189,7 @@ public class MainStockConsole implements StockStateListener, NativeKeyListener {
 	    System.out.println("|Buy Order: #" + (i+1) + "   (Completed/Pending)");
 	    System.out.println("|Symbol: " + overview.positions.get(i).openingOrder.stock.symbol);
 	    System.out.println("|Price: " + overview.positions.get(i).openingOrder.price + " SEK");
-	    System.out.println("|capital: " + String.format("%.2f", overview.positions.get(i).openingOrder.capital + " SEK"));
+	    System.out.println("|capital: " + overview.positions.get(i).openingOrder.capital + " SEK");
 	    System.out.println("|Shares: " + overview.positions.get(i).openingOrder.shares + "st");
 	    System.out.println("|account: #" + overview.positions.get(i).openingOrder.account);
 

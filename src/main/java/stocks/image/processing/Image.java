@@ -5,6 +5,10 @@ import java.awt.Color;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import stocks.image.processing.ocr.MainOcrImage;
 import stocks.system.RobotAwt;
@@ -19,7 +23,7 @@ public class Image {
     
     
 	
-	public static double getPriceAtMouse()  {
+	public static double getPriceAtMouse() {
 	    	Point mouseInfo = MouseInfo.getPointerInfo().getLocation();
 	    	int x = mouseInfo.x;
 	    	int y = mouseInfo.y;
@@ -39,13 +43,19 @@ public class Image {
 	    	    
 	    	    if (screenshot.getRGB(x, y) == new Color(76,82,94).getRGB()) {
 	    		// subimage where the price label box is and ocr
-	    		String ocr = MainOcrImage.ocr(screenshot.getSubimage(x, y-10, 60, 17));
-	    	
-		    	return Double.parseDouble(ocr.split("-")[1].replace(" ", "").replace("\n", ""));
+	    		
+	    		int endX = 0;
+	    		for (int i = 0; screenshot.getRGB(x+53+i, y-21) == new Color(76,82,94).getRGB(); i++) {
+	    		    endX++;
+	    		}
+	    		
+	    		String ocr = MainOcrImage.ocr(screenshot.getSubimage(x+60, y-14, endX-22, 45-19));
+	    		
+		    	return Double.parseDouble(ocr.replace(" ", "").replace("\n", "").replace(" ", ""));
 	    	    }
 	    	    
 	    	}
-		return -1;
+	return -1;
 	}
     
 	
