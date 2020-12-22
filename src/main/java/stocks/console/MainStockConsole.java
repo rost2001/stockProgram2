@@ -258,6 +258,7 @@ public class MainStockConsole implements StockStateListener, NativeKeyListener {
 
 	    pos.open(buy);
 	    overview.positions.add(pos);
+	    pos.openingOrder.stock.updatePrice(new MainStockConsole(), 500, false);
 
 	    consoleRefresh();
 
