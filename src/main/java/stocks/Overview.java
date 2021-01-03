@@ -3,12 +3,12 @@ package stocks;
 import java.util.ArrayList;
 import java.util.List;
 
+import stocks.interfaces.OrderStateListener;
 import stocks.interfaces.PositionStateListener;
 
-public class Overview implements PositionStateListener{
+public class Overview implements OrderStateListener{
 
-
-    public int account = 0;
+    public Account account;
 
     public double investmentCapital = 0.0; // capital to invest when buying
     public double capital = 0.0; // capital in account
@@ -17,29 +17,48 @@ public class Overview implements PositionStateListener{
     public double fees = 0.0;
     
     public List<Position> positions = new ArrayList<Position>();
+
+    ChromeBot bot;
     
-    public List<Position> oldPositions = new ArrayList<Position>();
-    
-    public Overview(){
+    public Overview() {
 	
     }
-
-    public Overview(int account, double investmentCapital){
-	
+    
+    public Overview(ChromeBot bot){
+	this.bot = bot;
     }
 
-
+    public Overview(int account, double investmentCapital, ChromeBot bot){
+	this.bot = bot;
+    }
+    
 
     @Override
-    public void onPositionClose(Position pos) {
-	profit += pos.profit;
-	fees += pos.fees;
+    public void onOrderPending(Order order) {
+	// TODO Auto-generated method stub
 	
-	positions.remove(pos);
-	oldPositions.add(pos);
     }
 
-    
-    
+    @Override
+    public void onOrderCompletion(Order order) {
+
+	for (Position pos : positions) {
+	    fees += pos.fees;
+	    profit += pos.profit;
+	}
+	
+    }
+
+    @Override
+    public void onOrderRemoval(Order order) {
+	// TODO Auto-generated method stub
+	
+    }
+
+    @Override
+    public void onOrderRemovalFailure(Order order) {
+	// TODO Auto-generated method stub
+	
+    }
     
 }

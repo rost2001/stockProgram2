@@ -5,11 +5,6 @@ import java.awt.Color;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-
 import stocks.image.processing.ocr.MainOcrImage;
 import stocks.system.RobotAwt;
 

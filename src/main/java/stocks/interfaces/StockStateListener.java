@@ -5,15 +5,16 @@ import stocks.Stock;
 public interface StockStateListener {
 	
 	/*
-	 * Interface for extending the code on when something happens like a new price update or new tradingview window or something else
-	 * The class that is to extend the code, is to implement the interface and to the methods add whatever code one wish to have executed on an event
-	 * This way multiple classes or implementations can use the same code or classes, like a console implementation and a gui implementation
+	 * 
+	 * 
+	 * Implement todo something on an event like a on a new price
 	 */
 	
 	
 	
-	void onNewPrice(Stock stock);
-	
-	void onNewTradingviewWindow(Stock stock);
+
+	void onNewPrice(double price);
+
+	void onNewSymbol(String symbol);
 
 }
