@@ -70,7 +70,7 @@ public class Console2 implements StockStateListener, NativeKeyListener {
 	System.out.print("Starting Buy bot...");
 	buyBot.start(ChromeBot.useragent, ChromeBot.defaultWindowSize);
 	System.out.print("Trying to log in, please start BankID app...");
-	buyBot.loginToAvanza();
+	buyBot.loginToAvanza("");
 	System.out.println("OK!");
 
 

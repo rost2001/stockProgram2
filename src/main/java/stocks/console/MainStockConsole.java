@@ -178,14 +178,14 @@ public class MainStockConsole implements StockStateListener, NativeKeyListener {
 	System.out.print("Starting Buy bot...");
 	buyBot.start(ChromeBot.useragent, ChromeBot.defaultWindowSize);
 	System.out.print("Trying to log in, please start BankID app...");
-	buyBot.loginToAvanza();
+	//buyBot.loginToAvanza();
 	System.out.println("OK!");
 
 	
 	System.out.print("Starting Sell bot...");
 	sellBot.start(ChromeBot.useragent, ChromeBot.defaultWindowSize);
 	System.out.print("Trying to log in, please start BankID app...");
-	sellBot.loginToAvanza();
+	//sellBot.loginToAvanza();
 	System.out.println("OK!");
 	
 	

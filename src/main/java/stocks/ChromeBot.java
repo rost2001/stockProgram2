@@ -59,7 +59,7 @@ public class ChromeBot {
 	this.driver = new ChromeDriver(options);
     }
 
-    public void loginToAvanza()  {
+    public void loginToAvanza(String personnummer)  {
 	try { 
 	    driver.get("https://www.avanza.se");
 	    // godkänna cookies knapp
@@ -73,7 +73,7 @@ public class ChromeBot {
 
 	    // personnummer fält
 	    el = findElements( "/html/body/aza-app/aza-right-overlay-area/aside/ng-component/aza-login-overlay/aza-right-overlay-template/main/div/aza-login/div/aza-toggle-switch-view/div/aza-bank-id/form/div[1]/div/input");
-	    el.get(0).sendKeys("199501161476");
+	    el.get(0).sendKeys(personnummer);
 
 	    // mobilt bankid knapp
 	    el = findElements( "/html/body/aza-app/aza-right-overlay-area/aside/ng-component/aza-login-overlay/aza-right-overlay-template/main/div/aza-login/div/aza-toggle-switch-view/div/aza-bank-id/form/div[1]/div/button[1]");

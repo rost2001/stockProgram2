@@ -38,7 +38,7 @@ public class MainTesting {
 		
 		System.out.println("Please start your BankID app...");
 		
-		bot.loginToAvanza();
+		//bot.loginToAvanza();
 		
 		
 		System.out.println("Logged in");
