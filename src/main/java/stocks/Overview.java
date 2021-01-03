@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import stocks.interfaces.OrderStateListener;
-import stocks.interfaces.PositionStateListener;
 
 public class Overview implements OrderStateListener{
 
