@@ -45,7 +45,7 @@ public class Console2 implements StockStateListener, NativeKeyListener, OrderSta
     static ChromeBot buyBot = new ChromeBot();
     static ChromeBot newsBot = new ChromeBot();
     static ChromeBot newsBot2 = new ChromeBot();
-    
+    static ChromeBot newsBot3 = new ChromeBot();
     
     static Overview overview = new Overview();
     static Position currentPosition = new Position();
@@ -88,12 +88,18 @@ public class Console2 implements StockStateListener, NativeKeyListener, OrderSta
 
 	newsBot.start(ChromeBot.USERAGENT, ChromeBot.DEFAULT_WINDOW_SIZE, ChromeBot.HEADLESS);
 	newsBot2.start(ChromeBot.USERAGENT, ChromeBot.DEFAULT_WINDOW_SIZE);
+	newsBot3.start(ChromeBot.USERAGENT, ChromeBot.DEFAULT_WINDOW_SIZE);
 	
 	
-	newsBot2.driver.get("https://finance.yahoo.com/quote/" + "AAPL");
+	newsBot2.driver.get("https://stocktwits.com/symbol/" + "AAPL");
 	List<WebElement> el = new ArrayList<WebElement>();
-	el = newsBot2.findElements("//button[contains(@class,'btn primary')]");
-	el.get(0).sendKeys(Keys.ENTER);
+	el = newsBot2.findElements("//button[contains(@id,'onetrust-accept-btn-handler')]");
+	el.get(0).click();
+	
+	
+	newsBot3.driver.get("https://finance.yahoo.com/quote/" + "AAPL");
+	el = newsBot3.findElements("//button[contains(@class,'btn primary')]");
+	el.get(0).click();
 
 
 	System.out.print("Starting Buy bot...");
@@ -102,9 +108,6 @@ public class Console2 implements StockStateListener, NativeKeyListener, OrderSta
 	
 	
 	ChromeBotAvanza.loginToAvanza(buyBot, "199501161476");
-	int watchers = ChromeBotStocktwits.getWatchers(buyBot, "asd");
-	ChromeBotTradingview.login(bot, email, password);
-	ChromeBotTradingview.getStockScreenerList(bot, name, col)
 	
 	
 	System.out.println("OK!");
@@ -212,6 +215,10 @@ myobj.remove();
 	    
 	    
 	    newsBot2.driver.get("https://stocktwits.com/symbol/" + symbol);
+	    
+		newsBot3.driver.get("https://finance.yahoo.com/quote/" + symbol);
+	    
+	    
 	    consoleRefresh();
 /*
 	    newsBot.driver.get("https://www.nasdaq.com/market-activity/stocks/" + symbol);
@@ -422,6 +429,7 @@ myobj.remove();
 	    buyBot.close();
 	    newsBot.close();
 	    newsBot2.close();
+	    newsBot3.close();
 	    System.exit(0); // Terminate program
 	}
 
