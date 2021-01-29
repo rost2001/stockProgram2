@@ -12,7 +12,7 @@ public class ChromeBotAvanza {
     
     private ChromeBotAvanza(){}
     
-    public static void loginToAvanza(ChromeBot bot, String personnummer)  throws Exception{
+    public static void loginToAvanza(ChromeBot bot)  throws Exception{
 
  	    bot.get("https://www.avanza.se");
  	    // godkänna cookies knapp
@@ -24,13 +24,9 @@ public class ChromeBotAvanza {
  	    el = bot.findElements("//button[contains(@class,'aza-button aza-text-button aza-text-primary ng-star-inserted')]");
  	    el.get(0).sendKeys(Keys.ENTER);
 
- 	    // personnummer fält
- 	    el = bot.findElements( "/html/body/aza-app/aza-right-overlay-area/aside/ng-component/aza-login-overlay/aza-right-overlay-template/main/div/aza-login/div/aza-toggle-switch-view/div/aza-bank-id/form/div[1]/div/input");
- 	    el.get(0).sendKeys(personnummer);
-
- 	    // mobilt bankid knapp
- 	    el = bot.findElements( "/html/body/aza-app/aza-right-overlay-area/aside/ng-component/aza-login-overlay/aza-right-overlay-template/main/div/aza-login/div/aza-toggle-switch-view/div/aza-bank-id/form/div[1]/div/button[1]");
- 	    el.get(0).sendKeys(Keys.ENTER);
+ 	    // bankid
+	    el = bot.findElements("//button[contains(@class,'aza-button cta-secondary')]");
+	    el.get(0).sendKeys(Keys.ENTER);
 
  	    // Kollar sidan efter inloggning
 	    Awaitility.await().atMost(10, TimeUnit.SECONDS).until(() -> {

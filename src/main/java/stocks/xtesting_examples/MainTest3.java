@@ -38,11 +38,14 @@ public class MainTest3 {
 	
 	Calendar from = Calendar.getInstance();
 	Calendar to = Calendar.getInstance();
-	from.add(3, -5);
+	from.add(Calendar.MONTH, -5);
+	
 	 
 	Stock google = YahooFinance.get(symbol);
 	List<HistoricalQuote> googleHistQuotes = google.getHistory(from, to, Interval.DAILY);
 
+	
+	
 	String history = "";
 	for(int i = 0; i < googleHistQuotes.size() ;i++) {
 

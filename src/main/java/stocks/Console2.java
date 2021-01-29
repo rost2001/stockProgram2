@@ -43,9 +43,10 @@ public class Console2 implements StockStateListener, NativeKeyListener, OrderSta
     static Stock viewingStock;
 
     static ChromeBot buyBot = new ChromeBot();
-    static ChromeBot newsBot = new ChromeBot();
     static ChromeBot newsBot2 = new ChromeBot();
     static ChromeBot newsBot3 = new ChromeBot();
+    
+    
     
     static Overview overview = new Overview();
     static Position currentPosition = new Position();
@@ -86,7 +87,6 @@ public class Console2 implements StockStateListener, NativeKeyListener, OrderSta
 	//--------------------------------------------------------------------------------------
 	
 
-	newsBot.start(ChromeBot.USERAGENT, ChromeBot.DEFAULT_WINDOW_SIZE, ChromeBot.HEADLESS);
 	newsBot2.start(ChromeBot.USERAGENT, ChromeBot.DEFAULT_WINDOW_SIZE);
 	newsBot3.start(ChromeBot.USERAGENT, ChromeBot.DEFAULT_WINDOW_SIZE);
 	
@@ -107,7 +107,7 @@ public class Console2 implements StockStateListener, NativeKeyListener, OrderSta
 	System.out.print("Trying to log in, please start BankID app...");
 	
 	
-	ChromeBotAvanza.loginToAvanza(buyBot, "199501161476");
+	ChromeBotAvanza.loginToAvanza(buyBot);
 	
 	
 	System.out.println("OK!");
@@ -117,7 +117,7 @@ public class Console2 implements StockStateListener, NativeKeyListener, OrderSta
 	viewingStock = new Stock("AAPL");
 
 	viewingStock.updatePrice(250, true, new Console2());
-	viewingStock.updateSymbol(50, new Console2());
+	viewingStock.updateSymbol(100, new Console2());
 
 	
 	
@@ -186,7 +186,6 @@ myobj.remove();
   
   Have stocks shown on tradingview aswell, with averages, and clickable link to change stocks by triggering the right script on the page 
 	 */
-	
     }
 
     @Override
@@ -204,19 +203,46 @@ myobj.remove();
 
 
 	    
-	    // Aktier
-	    buyBot.driver.get("https://www.avanza.se/ab/sok/inline?query=" + symbol);
+	    Thread thread1 = new Thread() {
+		    public void run() {
+			    // Aktier
+			    buyBot.driver.get("https://www.avanza.se/ab/sok/inline?query=" + symbol);
 
+			    List<WebElement> el = new ArrayList<WebElement>();
+			    try {
+				el = buyBot.findElements("//a");
+			    } catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			    }
+			    el.get(1).sendKeys(Keys.ENTER);
+		    }  
+		};
 
-	    el = buyBot.findElements("//a");
-	    el.get(1).sendKeys(Keys.ENTER);
+		thread1.start();
+
 	     
 	    
 	    
-	    
-	    newsBot2.driver.get("https://stocktwits.com/symbol/" + symbol);
-	    
-		newsBot3.driver.get("https://finance.yahoo.com/quote/" + symbol);
+	    Thread thread2 = new Thread() {
+		    public void run() {
+			    newsBot2.driver.get("https://stocktwits.com/symbol/" + symbol);
+			
+		    }  
+		};
+
+		thread2.start();
+
+		
+		
+	  Thread  thread3 = new Thread() {
+		    public void run() {
+		        newsBot3.driver.get("https://finance.yahoo.com/quote/" + symbol);
+		    }  
+		};
+
+		thread3.start();
+
 	    
 	    
 	    consoleRefresh();
@@ -427,7 +453,6 @@ myobj.remove();
 
 	if (e.getKeyCode() == NativeKeyEvent.VC_ESCAPE) {
 	    buyBot.close();
-	    newsBot.close();
 	    newsBot2.close();
 	    newsBot3.close();
 	    System.exit(0); // Terminate program

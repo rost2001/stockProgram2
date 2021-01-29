@@ -37,16 +37,19 @@ public class MainTesting {
 
 		String[] symbols = new String[] {"AMD", "zom", "izea", "bngo", "OCGN", "AAPL", "GOOGL", "ACOR", "CEI", "ZOOM"};
 
+		
 		// Can also be done with explicit from, to and Interval parameters
 		Calendar from = Calendar.getInstance();
 		Calendar to = Calendar.getInstance();
-		from.add(3, -10);
+		from.add(Calendar.MONTH, -10);
+		
 		
 		Map<String, Stock> stocks = null;
 		long startTime = System.currentTimeMillis();
 		stocks = YahooFinance.get(symbols);
 		long estimatedTime = System.currentTimeMillis() - startTime;
 		System.out.println("ms: **" + estimatedTime);
+		
 		
 		
 		ArrayList<Stock> stored = new ArrayList<Stock>();
