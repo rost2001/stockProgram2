@@ -8,9 +8,9 @@ import org.awaitility.Awaitility;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 
-public class ChromeBotAvanza {
+public class CBAvanza {
     
-    private ChromeBotAvanza(){}
+    private CBAvanza(){}
     
     public static void loginToAvanza(ChromeBot bot)  throws Exception{
 

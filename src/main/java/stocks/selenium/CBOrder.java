@@ -13,7 +13,7 @@ import stocks.data.Order;
 import stocks.data.Stock;
 import stocks.data.interfaces.OrderStateListener;
 
-public class ChromeBotOrder extends Order{
+public class CBOrder extends Order{
     
     Timer timerOrder = null;
     TimerTask taskOrder = null;
@@ -23,7 +23,7 @@ public class ChromeBotOrder extends Order{
     private String stockName;
     List<WebElement> el = new ArrayList<WebElement>();
 
-    public ChromeBotOrder(Stock stock, double capital, int shares, double price, Account account, Types type, ChromeBot buyBot, ChromeBot verifyBot, OrderStateListener ...osl) {
+    public CBOrder(Stock stock, double capital, int shares, double price, Account account, Types type, ChromeBot buyBot, ChromeBot verifyBot, OrderStateListener ...osl) {
 	super(stock, capital, shares, price, account, type, osl);
 	this.bot = buyBot;
 	this.bot2 = verifyBot;
@@ -330,7 +330,7 @@ public class ChromeBotOrder extends Order{
 				    taskOrder.cancel();
 				    
 				    for(OrderStateListener osl : osl)
-					osl.onOrderRemovalFailure(ChromeBotOrder.this);
+					osl.onOrderRemovalFailure(CBOrder.this);
 				    
 				} else if (state == States.NEW) {
 				    state = States.PENDING; // den finns på marknaden
@@ -338,7 +338,7 @@ public class ChromeBotOrder extends Order{
 				    taskOrder.cancel();
 				    
 				    for(OrderStateListener osl : osl)
-					osl.onOrderPending(ChromeBotOrder.this);
+					osl.onOrderPending(CBOrder.this);
 				}
 			    }
 			}
@@ -350,7 +350,7 @@ public class ChromeBotOrder extends Order{
 			    taskOrder.cancel();
 			    
 			    for(OrderStateListener osl : osl)
-				osl.onOrderCompletion(ChromeBotOrder.this);
+				osl.onOrderCompletion(CBOrder.this);
 			}
 
 		    }catch(Exception e) {

@@ -1,9 +1,5 @@
 package stocks.yahoo;
 
-import java.util.List;
-
-import yahoofinance.histquotes.HistoricalQuote;
-
 public class YahooHistory {
 
     

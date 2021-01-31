@@ -7,8 +7,8 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
 
 import stocks.selenium.ChromeBot;
-import stocks.selenium.ChromeBotStocktwits;
-import stocks.selenium.ChromeBotTradingview;
+import stocks.selenium.CBStocktwits;
+import stocks.selenium.CBTradingview;
 import yahoofinance.Stock;
 import yahoofinance.YahooFinance;
 import yahoofinance.histquotes.HistoricalQuote;
@@ -23,7 +23,7 @@ public class MainTest3 {
 	
 	bot.start(ChromeBot.USERAGENT, ChromeBot.DEFAULT_WINDOW_SIZE);
 	
-	ChromeBotTradingview.login(bot, "fredrik.jonsson.s@hotmail.com", "Uctrickme12");
+	CBTradingview.login(bot, "fredrik.jonsson.s@hotmail.com", "Uctrickme12");
 	
 	bot.setSize(1920, 1080);
 	
@@ -31,8 +31,8 @@ public class MainTest3 {
 	ChromeBot bot2 = new ChromeBot();
 	
 	bot2.start(ChromeBot.USERAGENT, ChromeBot.DEFAULT_WINDOW_SIZE, ChromeBot.HEADLESS);
-	String symbol = ChromeBotTradingview.getSymbol(bot);
-	int watchers = ChromeBotStocktwits.getWatchers(bot2, symbol);
+	String symbol = CBTradingview.getSymbol(bot);
+	int watchers = CBStocktwits.getWatchers(bot2, symbol);
 	
 	
 	

@@ -120,5 +120,9 @@ public class ChromeBot {
     public void setTimeout(int timeout) {
 	this.timeout = timeout;
     }
+    
+    public void maximize() {
+	this.driver.manage().window().maximize();
+    }
 
 }

@@ -22,9 +22,9 @@ import stocks.data.Stock;
 import stocks.data.interfaces.OrderStateListener;
 import stocks.data.interfaces.StockStateListener;
 import stocks.selenium.ChromeBot;
-import stocks.selenium.ChromeBotAvanza;
-import stocks.selenium.ChromeBotStocktwits;
-import stocks.selenium.ChromeBotTradingview;
+import stocks.selenium.CBAvanza;
+import stocks.selenium.CBStocktwits;
+import stocks.selenium.CBTradingview;
 
 public class Console2 implements StockStateListener, NativeKeyListener, OrderStateListener {
     
@@ -107,7 +107,7 @@ public class Console2 implements StockStateListener, NativeKeyListener, OrderSta
 	System.out.print("Trying to log in, please start BankID app...");
 	
 	
-	ChromeBotAvanza.loginToAvanza(buyBot);
+	CBAvanza.loginToAvanza(buyBot);
 	
 	
 	System.out.println("OK!");

@@ -3,11 +3,14 @@ package stocks.selenium;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
-public class ChromeBotTradingview {
+import stocks.xtesting_examples.Test13213.State;
 
-    private ChromeBotTradingview(){}
+public class CBTradingview {
+
+    private CBTradingview(){}
 
 
 
@@ -70,37 +73,72 @@ public class ChromeBotTradingview {
     /* Returns a stockscreener list of stocks as elements, 1 per symbol, ordered as stockscreener
      * Expecting: stockscreener is showing
      */
-    enum ColumnFilter{
+    public enum Column{
         BY_CHG,
         BY_OPEN,
         BY_PREMARKET;
+	
+	public double intervalLow;
+	public double intervalHigh;
+
+	public static Column getState(Column col, double intervalLow, double intervalHigh){
+	    Column col2 = col;
+	    col2.intervalLow = intervalLow;
+	    col2.intervalHigh = intervalHigh;
+	    return col2;
+	}
+	
+	public boolean equals(Column column) {
+	    if(this.name().equalsIgnoreCase(column.name())) {
+		return true;
+	    }
+	    return false;
+	}
     }
-    public static List<WebElement> getStockScreenerList(ChromeBot bot, String name, ColumnFilter col) throws Exception{
+    public static List<WebElement> getStockScreenerList(ChromeBot bot, Column ...columns) throws Exception{
 	
 	bot.get("https://www.tradingview.com/chart/");
 	List<WebElement> el = new ArrayList<WebElement>();
 	String xpathScreenerList = "//tr[contains(@class,'tv-data-table__row tv-data-table__stroke tv-screener-table__result-row')]";
 	//String xpathScreenerOpen = "//div[contains(@class,'tab-1fqQ8BUy apply-common-tooltip active-3fnMHeSg')]";
 	String xpathScreenerClosed = "//div[contains(@class,'tab-1fqQ8BUy apply-common-tooltip')]";
-	String xpathChg = "//div[contains(@class,'tv-data-table__th tv-data-table__cell js-tv-data-table-th js-tv-data-table-th-change tv-data-table__sortable tv-screener-table__sortable tv-screener-table__th js-draggable')]";
-	String xpathOpen = "//div[contains(@class,'tv-data-table__th tv-data-table__cell js-tv-data-table-th js-tv-data-table-th-change_from_open tv-data-table__sortable tv-screener-table__sortable tv-screener-table__th js-draggable')]";
-	String xpathPremarket = "//div[contains(@class,'tv-data-table__th tv-data-table__cell js-tv-data-table-th js-tv-data-table-th-premarket_change tv-data-table__sortable tv-screener-table__sortable tv-screener-table__th js-draggable')]";
+	String xpathScreenerMaximize = "//button[contains(@class,'button-txUjKTqi maximizeButton-QKvf0eBk apply-common-tooltip')]";
+	String xpathChg = "//th[contains(@class,'tv-data-table__th tv-data-table__cell js-tv-data-table-th js-tv-data-table-th-change tv-data-table__sortable tv-screener-table__sortable tv-screener-table__th js-draggable')]";
+	String xpathOpen = "//th[contains(@class,'tv-data-table__th tv-data-table__cell js-tv-data-table-th js-tv-data-table-th-change_from_open tv-data-table__sortable tv-screener-table__sortable tv-screener-table__th js-draggable')]";
+	String xpathPremarket = "//th[contains(@class,'tv-data-table__th tv-data-table__cell js-tv-data-table-th js-tv-data-table-th-premarket_change tv-data-table__sortable tv-screener-table__sortable tv-screener-table__th js-draggable')]";
+	String xpathFilterButton = "//i[contains(@class,'js-filter-button tv-screener-table__filter-button')]";
 	
-	
+
 	// Screener is not open
 	if(bot.elementExist(xpathScreenerClosed)) {
 	    bot.findElements(xpathScreenerClosed).get(0).click();
 	} 
 	
-	// which column to sort by
-	if(col == ColumnFilter.BY_CHG) {
-	    bot.findElements(xpathChg).get(0).click();
-	} else if (col == ColumnFilter.BY_OPEN) {
-	    bot.findElements(xpathOpen).get(0).click();
-	} else if (col == ColumnFilter.BY_PREMARKET) {
-	    bot.findElements(xpathPremarket).get(0).click();
-	}
+	// Screener is not maximized
+	if(bot.elementExist(xpathScreenerMaximize)) {
+	    bot.findElements(xpathScreenerMaximize).get(0).click();
+	} 
+
 	
+	for(Column col : columns) {
+
+		 bot.findElements(xpathChg).get(0).findElements(By.cssSelector("i *")).get(0).click();
+	    // which column to sort by
+	    if(col.equals(Column.BY_CHG)) {
+	    } else if (col == Column.BY_OPEN) {
+		
+	    } else if (col == Column.BY_PREMARKET) {
+		
+	    }
+
+	}
+
+	
+	// intervals
+	
+	
+	
+	// retrieves all stock names
 	el = bot.findElements(xpathScreenerList);
 	return el;
     }

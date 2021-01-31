@@ -2,9 +2,9 @@ package stocks.selenium;
 
 import java.util.List;
 
-public class ChromeBotNews {
+public class CBNews {
 
-    private ChromeBotNews(){}
+    private CBNews(){}
     
     
     public static List<String> getStocktwits(ChromeBot bot, String symbol) throws Exception{

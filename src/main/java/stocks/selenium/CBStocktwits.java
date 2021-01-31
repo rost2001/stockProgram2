@@ -8,9 +8,9 @@ import org.awaitility.Awaitility;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 
-public class ChromeBotStocktwits {
+public class CBStocktwits {
     
-    private ChromeBotStocktwits(){}
+    private CBStocktwits(){}
     
     public static int getWatchers(ChromeBot bot, String symbol) throws Exception{
 
