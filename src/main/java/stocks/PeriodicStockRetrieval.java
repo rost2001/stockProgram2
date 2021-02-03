@@ -1,5 +1,10 @@
 package stocks;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.openqa.selenium.WebElement;
+
 import stocks.selenium.CBTradingview;
 import stocks.selenium.CBTradingview.Column;
 import stocks.selenium.ChromeBot;
@@ -31,10 +36,15 @@ public class PeriodicStockRetrieval {
 	
 	CBTradingview.login(bot, "fredrik.jonsson.s@hotmail.com", "Uctrickme12");
 	
-	CBTradingview.getStockScreenerList(bot, Column.getState(Column.BY_CHG, 10, 20));
+
+	String[] symbols = CBTradingview.getStockScreenerList(bot, 1000, Column.getColumn(Column.BY_CHG, -20, 100));
 	
+	for(String str : symbols) {
+		System.out.println(str);
+	}
 	
-	
+	System.out.println(symbols.length);
+
 	
 	Thread.sleep(10000);
 	bot.close();

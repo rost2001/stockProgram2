@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 
+import stocks.system.RobotAwt;
 import stocks.xtesting_examples.Test13213.State;
 
 public class CBTradingview {
@@ -81,7 +83,7 @@ public class CBTradingview {
 	public double intervalLow;
 	public double intervalHigh;
 
-	public static Column getState(Column col, double intervalLow, double intervalHigh){
+	public static Column getColumn(Column col, double intervalLow, double intervalHigh){
 	    Column col2 = col;
 	    col2.intervalLow = intervalLow;
 	    col2.intervalHigh = intervalHigh;
@@ -95,7 +97,7 @@ public class CBTradingview {
 	    return false;
 	}
     }
-    public static List<WebElement> getStockScreenerList(ChromeBot bot, Column ...columns) throws Exception{
+    public static String[] getStockScreenerList(ChromeBot bot, int numberOfStocks, Column ...columns) throws Exception{
 	
 	bot.get("https://www.tradingview.com/chart/");
 	List<WebElement> el = new ArrayList<WebElement>();
@@ -107,8 +109,13 @@ public class CBTradingview {
 	String xpathOpen = "//th[contains(@class,'tv-data-table__th tv-data-table__cell js-tv-data-table-th js-tv-data-table-th-change_from_open tv-data-table__sortable tv-screener-table__sortable tv-screener-table__th js-draggable')]";
 	String xpathPremarket = "//th[contains(@class,'tv-data-table__th tv-data-table__cell js-tv-data-table-th js-tv-data-table-th-premarket_change tv-data-table__sortable tv-screener-table__sortable tv-screener-table__th js-draggable')]";
 	String xpathFilterButton = "//i[contains(@class,'js-filter-button tv-screener-table__filter-button')]";
+	String xpathBetweenList = "//span[contains(@class,'tv-screener-inplace-editor__selectbox-caption')]";
+	String xpathBetween = "//span[contains(@class,'tv-dropdown-behavior__item tv-control-select__option js-option')]";
+	String xpathInputLow = "//input[contains(@class,'tv-screener-inplace-editor__filter-field-content--right tv-screener-inplace-editor__filter-between-input js-filter-operator-between-left')]";
+	String xpathInputHigh = "//input[contains(@class,'tv-screener-inplace-editor__filter-field-content--right tv-screener-inplace-editor__filter-between-input js-filter-operator-between-right')]";
+	String xpathStock = "//tr[contains(@class,'tv-data-table__row tv-data-table__stroke tv-screener-table__result-row')]";
+	String xpathStockTable = "//table[contains(@class,'tv-data-table tv-screener-table tv-screener-table--fixed')]";
 	
-
 	// Screener is not open
 	if(bot.elementExist(xpathScreenerClosed)) {
 	    bot.findElements(xpathScreenerClosed).get(0).click();
@@ -122,25 +129,45 @@ public class CBTradingview {
 	
 	for(Column col : columns) {
 
-		 bot.findElements(xpathChg).get(0).findElements(By.cssSelector("i *")).get(0).click();
+	    WebElement element;
 	    // which column to sort by
 	    if(col.equals(Column.BY_CHG)) {
+		element = bot.findElements(xpathChg).get(0);
+		element.findElements(By.cssSelector("i *")).get(0).click();
+		Thread.sleep(200);
+		bot.findElements(xpathBetweenList).get(0).click();
+		bot.findElements(xpathBetween).get(4).click();
+		bot.findElements(xpathInputLow).get(0).sendKeys(String.valueOf(col.intervalLow));
+		bot.findElements(xpathInputHigh).get(0).sendKeys(String.valueOf(col.intervalHigh));
+		
 	    } else if (col == Column.BY_OPEN) {
-		
+		element = bot.findElements(xpathOpen).get(0);
+		element.findElements(By.cssSelector("i *")).get(0).click();
 	    } else if (col == Column.BY_PREMARKET) {
-		
+		element = bot.findElements(xpathPremarket).get(0);
+		element.findElements(By.cssSelector("i *")).get(0).click();
 	    }
 
 	}
 
-	
-	// intervals
-	
+	Thread.sleep(2000);
+	RobotAwt botAwt = new RobotAwt();
+	botAwt.mouseMove(500, 500, 20);
+	for(int i = 0; i < (numberOfStocks/150 - 1); i++) {
+	botAwt.mouseWheel(100);
+	Thread.sleep(2000);
+	}
 	
 	
 	// retrieves all stock names
 	el = bot.findElements(xpathScreenerList);
-	return el;
+	
+	String[] symbols = new String[el.size()];
+	for(int i = 0; i < el.size(); i++) {
+	    symbols[i] = ChromeBot.getWords(el.get(i)).get(0);
+	}
+	
+	return symbols;
     }
 
     
