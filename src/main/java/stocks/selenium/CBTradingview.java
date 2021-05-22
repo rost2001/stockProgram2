@@ -1,10 +1,7 @@
 package stocks.selenium;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -54,16 +51,23 @@ public class CBTradingview {
 	Thread.sleep(1000);
 	bot.get("https://www.tradingview.com/chart/");
     }
-
+    
     /* Returns a watchlist as web elements, 1 per symbol, ordered as in watchlist
      * Expecting: watchlist is showing
      */
-    public static List<WebElement> getWatchList(ChromeBot bot) throws Exception{
-
+    public static List<WebElement> getWatchList(ChromeBot bot, String name) throws Exception{
+	
 	bot.get("https://www.tradingview.com/chart/");
 	List<WebElement> el = new ArrayList<WebElement>();
-	String xpathWatchlist = "//div[contains(@class,'symbol-EJ_LFrif')]";
-
+	String xpathWatchlist = "//div[contains(@class,'wrap-ZwpHWy6f')]";
+	//String xpathWatchlistOpen = "//div[contains(@class,'button-3SuA46Ww isTab-1dbyVeUX isActive-1D4aU96I isGrayed-3O5VgbN4 apply-common-tooltip common-tooltip-vertical')]";
+	String xpathWatchlistClosed = "//div[contains(@class,'button-3SuA46Ww isTab-1dbyVeUX apply-common-tooltip common-tooltip-vertical')]";
+	
+	// watchlist is not open
+	if(bot.elementExist(xpathWatchlistClosed)) {
+	    bot.findElements(xpathWatchlistClosed).get(0).click();
+	} 
+	
 	el = bot.findElements(xpathWatchlist);
 	return el;
     }
@@ -72,10 +76,10 @@ public class CBTradingview {
      * Expecting: stockscreener is showing
      */
     public enum Column{
-	BY_CHG,
-	BY_OPEN,
-	BY_PREMARKET;
-
+        BY_CHG,
+        BY_OPEN,
+        BY_PREMARKET;
+	
 	public double intervalLow;
 	public double intervalHigh;
 
@@ -85,7 +89,7 @@ public class CBTradingview {
 	    col2.intervalHigh = intervalHigh;
 	    return col2;
 	}
-
+	
 	public boolean equals(Column column) {
 	    if(this.name().equalsIgnoreCase(column.name())) {
 		return true;
@@ -94,7 +98,7 @@ public class CBTradingview {
 	}
     }
     public static String[] getStockScreenerList(ChromeBot bot, int numberOfStocks, Column ...columns) throws Exception{
-
+	
 	bot.get("https://www.tradingview.com/chart/");
 	List<WebElement> el = new ArrayList<WebElement>();
 	String xpathScreenerList = "//tr[contains(@class,'tv-data-table__row tv-data-table__stroke tv-screener-table__result-row')]";
@@ -111,18 +115,18 @@ public class CBTradingview {
 	String xpathInputHigh = "//input[contains(@class,'tv-screener-inplace-editor__filter-field-content--right tv-screener-inplace-editor__filter-between-input js-filter-operator-between-right')]";
 	String xpathStock = "//tr[contains(@class,'tv-data-table__row tv-data-table__stroke tv-screener-table__result-row')]";
 	String xpathStockTable = "//table[contains(@class,'tv-data-table tv-screener-table tv-screener-table--fixed')]";
-
+	
 	// Screener is not open
 	if(bot.elementExist(xpathScreenerClosed)) {
 	    bot.findElements(xpathScreenerClosed).get(0).click();
 	} 
-
+	
 	// Screener is not maximized
 	if(bot.elementExist(xpathScreenerMaximize)) {
 	    bot.findElements(xpathScreenerMaximize).get(0).click();
 	} 
 
-
+	
 	for(Column col : columns) {
 
 	    WebElement element;
@@ -135,7 +139,7 @@ public class CBTradingview {
 		bot.findElements(xpathBetween).get(4).click();
 		bot.findElements(xpathInputLow).get(0).sendKeys(String.valueOf(col.intervalLow));
 		bot.findElements(xpathInputHigh).get(0).sendKeys(String.valueOf(col.intervalHigh));
-
+		
 	    } else if (col == Column.BY_OPEN) {
 		element = bot.findElements(xpathOpen).get(0);
 		element.findElements(By.cssSelector("i *")).get(0).click();
@@ -150,120 +154,30 @@ public class CBTradingview {
 	RobotAwt botAwt = new RobotAwt();
 	botAwt.mouseMove(500, 500, 20);
 	for(int i = 0; i < (numberOfStocks/150 - 1); i++) {
-	    botAwt.mouseWheel(100);
-	    Thread.sleep(2000);
+	botAwt.mouseWheel(100);
+	Thread.sleep(2000);
 	}
-
-
+	
+	
 	// retrieves all stock names
 	el = bot.findElements(xpathScreenerList);
-
+	
 	String[] symbols = new String[el.size()];
 	for(int i = 0; i < el.size(); i++) {
 	    symbols[i] = ChromeBot.getWords(el.get(i)).get(0);
 	}
-
+	
 	return symbols;
     }
 
-
+    
     public static String getSymbol(ChromeBot bot) throws Exception {
 	bot.get("https://www.tradingview.com/chart/");
 	List<WebElement> el = new ArrayList<WebElement>();
-
+	
 	// symbol
 	el = bot.findElements("//div[contains(@class,'js-button-text text-1sK7vbvh text-3iiFkI3q')]");
 	return el.get(0).getAttribute("innerText");
     }
-
-
-    public enum Info{
-	NAME,
-	MKT,
-	VOL,
-	LAST,
-	PROCENTAGE,
-	SHARES,
-	EMPLOYEES,
-	HIGH;
-    }
-    public static Map<Info, String> getStockInfo(ChromeBot bot, Info ...types) throws Exception {
-	String xpathmkt = "//span[contains(@class,'data-3iXCXbow')]";
-	String xpathvol = "//span[contains(@class,'data-3iXCXbow')]";
-	String xpathlast = "//span[contains(@class,'price-3PT2D-PK')]";
-	String xpathprocentage = "//span[contains(@class,'change-3PT2D-PK')]";
-	String xpathInfoButton = "//button[contains(@class,'button-29Bh2ACj button-XCmieq1Q')]";
-	String xpathshares = "//span[contains(@class,'data-3iXCXbow')]";
-	String xpathemployees ="//span[contains(@class,'data-3iXCXbow')]";
-	String xpathName = "//span[contains(@class,'title-2ahQmZbQ')]";
-	String xpathHigh = "//span[contains(@class,'price-1c6h-6Rx')]";
-
-	String xpathEmployeesTitle = "//span[contains(@class,'title-3iXCXbow')]";
-	List<WebElement> el = new ArrayList<WebElement>();
-	Map<Info, String> map = new LinkedHashMap<Info, String>();
-
-	for (Info type : types) {
-	    if(type.name().equals(Info.MKT.name())) {
-		el = bot.findElements(xpathmkt);
-		if (el.size() != 0)
-		    map.put(type, el.get(2).getAttribute("innerText"));
-
-	    } else if (type.name().equals(Info.VOL.name())) {
-		el = bot.findElements(xpathvol);
-		if (el.size() != 0)
-		    map.put(type, el.get(0).getAttribute("innerText"));
-
-	    } else if (type.name().equals(Info.LAST.name())) {
-		el = bot.findElements(xpathlast);
-		if (el.size() != 0)
-		    map.put(type, el.get(0).getAttribute("innerText"));
-
-	    } else if (type.name().equals(Info.PROCENTAGE.name())) {
-		el = bot.findElements(xpathprocentage);
-		if (el.size() != 0) {
-		    map.put(type, el.get(1).getAttribute("innerText").replace("−", "-"));
-		}
-
-	    } else if (type.name().equals(Info.SHARES.name())) {
-		bot.findElements(xpathInfoButton).get(0).click();
-		el = bot.findElements(xpathshares);
-		if(el.size() < 7) {
-		    bot.findElements(xpathInfoButton).get(0).click();
-		    el = bot.findElements(xpathshares);
-		}
-		if (el.size() != 0)
-		    map.put(type, el.get(6).getAttribute("innerText"));
-
-	    } else if (type.name().equals(Info.EMPLOYEES.name())) {
-		el = bot.findElements(xpathshares);
-
-		List<WebElement> el2 = bot.findElements(xpathEmployeesTitle);
-		for(WebElement element : el2){
-		    if(element.getAttribute("innerText").toLowerCase().contains("Employees".toLowerCase())) {
-
-			if(el.size() > 6) {
-			    map.put(type, el.get(8).getAttribute("innerText"));
-
-			} else if (el.size() != 0)
-			    map.put(type, el.get(5).getAttribute("innerText"));
-		    }
-		}
-
-	    } else if (type.name().equals(Info.NAME.name())) {
-		el = bot.findElements(xpathName);
-		map.put(type, el.get(0).getAttribute("innerText"));
-
-	    } else if (type.name().equals(Info.HIGH.name())) {
-		el = bot.findElements(xpathHigh);
-		map.put(type, el.get(1).getAttribute("innerText"));
-
-	    }
-	}
-	
-	
-	return map;
-    }
-    
-    
 }
 

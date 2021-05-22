@@ -81,4 +81,3 @@ nb-configuration.xml
 ## OS X
 ##############################
 .DS_Store
-src/main/resources/FileStorage/Credentials.txt

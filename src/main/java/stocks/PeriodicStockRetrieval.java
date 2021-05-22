@@ -3,7 +3,6 @@ package stocks;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.WebElement;
 
 import stocks.selenium.CBTradingview;
@@ -32,8 +31,8 @@ public class PeriodicStockRetrieval {
 	
 	
 	ChromeBot bot = new ChromeBot();
-	bot.start(PageLoadStrategy.NORMAL, ChromeBot.USERAGENT);
-	bot.maximizeWindow();
+	bot.start(ChromeBot.USERAGENT);
+	bot.maximize();
 	
 	CBTradingview.login(bot, "fredrik.jonsson.s@hotmail.com", "Uctrickme12");
 	

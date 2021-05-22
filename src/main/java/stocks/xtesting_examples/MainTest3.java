@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.PageLoadStrategy;
 
 import stocks.selenium.ChromeBot;
 import stocks.selenium.CBStocktwits;
@@ -22,7 +21,7 @@ public class MainTest3 {
 
 	ChromeBot bot = new ChromeBot();
 	
-	bot.start(PageLoadStrategy.NORMAL, ChromeBot.USERAGENT, ChromeBot.DEFAULT_WINDOW_SIZE);
+	bot.start(ChromeBot.USERAGENT, ChromeBot.DEFAULT_WINDOW_SIZE);
 	
 	CBTradingview.login(bot, "fredrik.jonsson.s@hotmail.com", "Uctrickme12");
 	
@@ -31,9 +30,9 @@ public class MainTest3 {
 	//--------
 	ChromeBot bot2 = new ChromeBot();
 	
-	bot2.start(PageLoadStrategy.NORMAL, ChromeBot.USERAGENT, ChromeBot.DEFAULT_WINDOW_SIZE, ChromeBot.HEADLESS);
+	bot2.start(ChromeBot.USERAGENT, ChromeBot.DEFAULT_WINDOW_SIZE, ChromeBot.HEADLESS);
 	String symbol = CBTradingview.getSymbol(bot);
-	String watchers = CBStocktwits.getWatchers(bot2, symbol);
+	int watchers = CBStocktwits.getWatchers(bot2, symbol);
 	
 	
 	
@@ -63,10 +62,14 @@ public class MainTest3 {
 	history += "<br/>--------------------------------------";
 	history += "<br/>";
 	}
-
-	// part 1. retrieves ALT
-	// part 2. removes 
-	// part 3. adds
+	/* Filesystem / data in file or database storage:
+	 * 
+	 * Store [symbol][watchers][marketcap][shares][vol][%,GapLowHighClose] -- retrieve maybe from tradingview of all below 1000 million marketcap
+	 * Update (start of day)(or when running it), except "vol" needs to be updated realtime so headless sidewindow
+	 * Periodic update (during day), can store to show things like vol before it can be retrieve in realtime like during loading of sidewindow
+	 * 
+	 * 
+	 */
 	
 	
 	Thread.sleep(500);

@@ -88,14 +88,10 @@ public class Stock implements StockStateListener{
     }
 
 
-    public interface OnUpdatedPrice {
-	void run(double str);
-    }
-    /* Checks every *ms if price has changed and updates price.
-     * Checks first for price in title if set to true, then from yahoo.
-     * Then sends that price to the functional interface.
-     * */
-    public void updatePrice(int time, boolean tradingviewData, OnUpdatedPrice function) {
+    // Checks every *ms if price has changed and updates price
+    // Checks first for price in title if set to true, then from yahoo
+    // Implemented interface is optional, will be called if there is a change in price
+    public void updatePrice(int time, boolean tradingviewData, StockStateListener ...ssl) {
 
 
 	if (timerPrice == null)
@@ -132,12 +128,13 @@ public class Stock implements StockStateListener{
 
 
 			    // if new price
-			    if (currentPrice != newPrice) {
+			    if (currentPrice != newPrice && ssl != null) {
 
 
 				price = newPrice;
 
-				function.run(newPrice);
+				for(StockStateListener ssl : ssl)
+				ssl.onNewPrice(newPrice); 
 
 			    }
 
@@ -157,13 +154,10 @@ public class Stock implements StockStateListener{
     }
 
 
-    public interface OnUpdatedSymbol {
-	void run(String str);
-    }
-    /* Checks every *ms if viewing a different tradingview window and if so it gets a stock symbol.
-     * Sends that symbol to the functional interface.
-     * */
-    public void updateSymbol(int time, OnUpdatedSymbol function) {
+
+    // Checks every *ms if viewing a different tradingview window and if so it sets a new stock symbol
+    // Implemented interface is optional, will be called if there is a change to another symbol
+    public void updateSymbol(int time, StockStateListener ...ssl) {
 
 	if (timerSymbol == null)
 	    timerSymbol = new Timer();
@@ -187,7 +181,9 @@ public class Stock implements StockStateListener{
 
 				symbol = newSymbol;
 
-				function.run(newSymbol); 
+				for(StockStateListener ssl : ssl)
+				    ssl.onNewSymbol(newSymbol); 
+
 
 			    }
 
