@@ -18,12 +18,13 @@ import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-import stocks.utils.ULogging;
+import stocks.utils.ULoggings;
 
 
 public class TestCB implements NativeKeyListener{
@@ -46,7 +47,7 @@ public class TestCB implements NativeKeyListener{
     public static void main(String[] args) throws IOException, InterruptedException, AWTException {
 
 	//-------------------------------------------------------
-	ULogging.disableKeyLogging();
+	ULoggings.disableKeyLogging();
 
 
 	try {
@@ -64,7 +65,7 @@ public class TestCB implements NativeKeyListener{
 	//-------------------------------------------------------
 
 
-	bot.start(ChromeBot.USERAGENT,ChromeBot.DEFAULT_WINDOW_SIZE);
+	bot.start(PageLoadStrategy.NORMAL, ChromeBot.USERAGENT,ChromeBot.DEFAULT_WINDOW_SIZE);
 
 
     }
@@ -90,7 +91,7 @@ public class TestCB implements NativeKeyListener{
 
 
 
-	/* skriv en xpath och om den finns så visas ord för ord och index 2 dimensionellt
+	/* skriv en xpath och om den finns sï¿½ visas ord fï¿½r ord och index 2 dimensionellt
 	 */
 	if (ctrlPressed == true && altPressed == true && e.getKeyCode() == NativeKeyEvent.VC_B) {
 	    try {

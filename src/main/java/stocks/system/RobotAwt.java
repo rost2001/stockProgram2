@@ -13,6 +13,8 @@ public class RobotAwt extends java.awt.Robot {
 		// TODO Auto-generated constructor stub
 	}
 
+
+
 	public void mouseMove(int x, int y, int delay) throws InterruptedException {
 
 		mouseMove(x, y);
