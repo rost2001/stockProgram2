@@ -21,6 +21,9 @@ public class TestMapSort {
 	
 	for(Map.Entry<String, Double> entry : result.entrySet())
 	    System.out.println(entry.getKey() + ": " + entry.getValue());
+    
+    
+	 StringBuffer currentSymbol = new StringBuffer("Hello");
     }
 
 }

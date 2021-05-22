@@ -1,5 +1,7 @@
 package stocks.model.system;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -16,29 +18,8 @@ public class Stock{
 	System.setProperty(org.slf4j.impl.SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "ERROR");
     }
 
-    public String symbol;
-    public double price;
-
-    Timer timerPrice = null;
-    TimerTask taskPrice = null;
-
-    Timer timerSymbol = null;
-    TimerTask taskSymbol = null;
-
-    public Stock(String symbol) {
-	yahoofinance.Stock stock = get(symbol);
-	this.symbol = stock.getQuote().getSymbol();
-	this.price = stock.getQuote().getPrice().doubleValue();
-    }
-
-
-    public Stock(String symbol, double price) {
-	this.symbol = symbol;
-	this.price = price;
-    }
-
-
-    public yahoofinance.Stock get(String symbol) {
+    
+    public static yahoofinance.Stock get(String symbol) {
 	try {
 
 	    // Sends request to Yahoo
@@ -58,86 +39,57 @@ public class Stock{
 	}
     }
 
-    public void stopUpdatingPrice() {
-	if (timerPrice != null) 
-	    timerPrice.cancel();
-	if (taskPrice != null) 
-	    taskPrice.cancel();
-    }
-
-    public void stopUpdatingSymbol() {
-	if(timerSymbol != null)
-	    timerSymbol.cancel();
-	if(timerSymbol != null)
-	    timerSymbol.cancel();
-    }
-
-
     public interface OnUpdatedPrice {
 	void run(double str);
     }
-    /* Checks every *ms if price has changed and updates price.
-     * Checks first for price in title if set to true, then from yahoo.
-     * Then sends that price to the functional interface.
-     * */
-    public void updatePrice(int time, boolean tradingviewData, OnUpdatedPrice function) {
+    public static Map<Timer, TimerTask> checkPrice(int time, boolean tradingviewData, double price, StringBuffer symbol, OnUpdatedPrice function) {
 
+	Timer timer = new Timer();
+	TimerTask task = new TimerTask() {
 
-	if (timerPrice == null)
-	    timerPrice = new Timer();
+	    @Override
+	    public void run() {
+		//----------------------------------------------------------
+		try {
 
-	if(taskPrice == null) {
-	    taskPrice = new TimerTask() {
+		    double newPrice = 0;
 
-		@Override
-		public void run() {
-		    //----------------------------------------------------------
-		    try {
+		    HWND activeWindow = WindowsNative.getActiveWindow();
+		    String windowTitle = WindowsNative.getActiveWindowTitle(activeWindow);
 
+		    // Difference of chorme window and desktop tradingview app
+		    if (tradingviewData && windowTitle.contains("% Unnamed") && symbol.toString().equalsIgnoreCase(windowTitle.split(" ")[0])) {
+			newPrice = Double.parseDouble(windowTitle.split(" ")[1]);
+		    }
+		    else if (tradingviewData && windowTitle.contains("% / Unnamed") && symbol.toString().equalsIgnoreCase(windowTitle.split(" ")[0])) {
+			// else Desktop app, and the"%" is for for it not crashing when switching between stocks
+			newPrice = Double.parseDouble(windowTitle.split(" ")[3]);
+		    } 
+		    else { 
+			// Yahoo data
+			newPrice = get(symbol.toString()).getQuote().getPrice().doubleValue();
+		    }
 
-			if (symbol != null) {
-			    double currentPrice = price;
-			    double newPrice = 0;
-
-			    HWND activeWindow = WindowsNative.getActiveWindow();
-			    String windowTitle = WindowsNative.getActiveWindowTitle(activeWindow);
-
-			    // Difference of chorme window and desktop tradingview app
-			    if (tradingviewData && windowTitle.contains("% Unnamed") && symbol.equalsIgnoreCase(windowTitle.split(" ")[0])) {
-				newPrice = Double.parseDouble(windowTitle.split(" ")[1]);
-			    }
-			    else if (tradingviewData && windowTitle.contains("% / Unnamed") && symbol.equalsIgnoreCase(windowTitle.split(" ")[0])) {
-				// else Desktop app, and the"%" is for for it not crashing when switching between stocks
-				newPrice = Double.parseDouble(windowTitle.split(" ")[3]);
-			    } 
-			    else { 
-				// Yahoo data
-				newPrice = get(symbol).getQuote().getPrice().doubleValue();
-			    }
-
-
-			    // if new price
-			    if (currentPrice != newPrice) {
-
-
-				price = newPrice;
-
-				function.run(newPrice);
-
-			    }
-
-			}
-
-		    }catch(Exception e){
-			return;
+		    // if new price
+		    if (price != newPrice) {
+			function.run(newPrice);
 		    }
 
 
-		    //----------------------------------------------------------
+		}catch(Exception e){
+		    return;
 		}
-	    };
-	    timerPrice.scheduleAtFixedRate(taskPrice, 0, time);
-	}
+
+
+		//----------------------------------------------------------
+	    }
+	};
+	timer.scheduleAtFixedRate(task, 0, time);
+
+	Map<Timer, TimerTask> tt = new HashMap<Timer, TimerTask>();
+	tt.put(timer, task);
+	return tt;
+
 
     }
 
@@ -145,49 +97,37 @@ public class Stock{
     public interface OnUpdatedSymbol {
 	void run(String str);
     }
-    /* Checks every *ms if viewing a different tradingview window and if so it gets a stock symbol.
-     * Sends that symbol to the functional interface.
-     * */
-    public void updateSymbol(int time, OnUpdatedSymbol function) {
+    public static Map<Timer, TimerTask> checkSymbol(int time, StringBuffer symbol, OnUpdatedSymbol function) {
 
-	if (timerSymbol == null)
-	    timerSymbol = new Timer();
+	Timer timer = new Timer();
+	TimerTask task = new TimerTask() {
+	    @Override
+	    public void run() {
+		//----------------------------------------------------------
+		try {
+		    HWND activeWindow = WindowsNative.getActiveWindow();
+		    String windowTitle = WindowsNative.getActiveWindowTitle(activeWindow);
 
-	if(taskSymbol == null) {
-	    taskSymbol = new TimerTask() {
-		@Override
-		public void run() {
-		    //----------------------------------------------------------
-		    try {
-			HWND activeWindow = WindowsNative.getActiveWindow();
-			String windowTitle = WindowsNative.getActiveWindowTitle(activeWindow);
+		    if (windowTitle.contains("% Unnamed") || windowTitle.contains("% / Unnamed")) {
 
-
-
-			if (windowTitle.contains("% Unnamed") || windowTitle.contains("% / Unnamed")) {
-
-			    if (!symbol.equalsIgnoreCase(windowTitle.split(" ")[0])) {
-				String newSymbol = windowTitle.split(" ")[0];
-
-
-				symbol = newSymbol;
-
-				function.run(newSymbol); 
-
-			    }
-
+			if (!symbol.toString().equalsIgnoreCase(windowTitle.split(" ")[0])) {
+			    String newSymbol = windowTitle.split(" ")[0];
+			    function.run(newSymbol); 
 
 			}
 
-		    }catch(Exception e) {
-			return;
 		    }
-		    //----------------------------------------------------------
-		};
-	    };
-	    timerSymbol.scheduleAtFixedRate(taskSymbol, 0, time);
 
-	}
+		}catch(Exception e) {
+		    return;
+		}
+		//----------------------------------------------------------
+	    };
+	};
+	timer.scheduleAtFixedRate(task, 0, time);
+	Map<Timer, TimerTask> tt = new HashMap<Timer, TimerTask>();
+	tt.put(timer, task);
+	return tt;
     }
 
 }
