@@ -82,3 +82,4 @@ nb-configuration.xml
 ##############################
 .DS_Store
 src/main/resources/FileStorage/Credentials.txt
+src/main/resources/FileStorage/Credentials.txt
