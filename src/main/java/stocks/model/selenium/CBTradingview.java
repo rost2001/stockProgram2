@@ -23,6 +23,8 @@ public class CBTradingview {
 
 	// cookie knapp
 	el = bot.findElements("//button[contains(@class,'button-1iktpaT1 size-s-3mait84m intent-primary-1-IOYcbg appearance-default-dMjF_2Hu')]");
+	Thread.sleep(3000);
+	
 	el.get(0).click();
 
 

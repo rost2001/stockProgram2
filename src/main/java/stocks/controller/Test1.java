@@ -2,26 +2,26 @@ package stocks.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.jnativehook.keyboard.NativeKeyEvent;
 import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.Color;
+import org.openqa.selenium.support.Colors;
 
-import stocks.model.selenium.CBAvanza;
 import stocks.model.selenium.CBStocktwits;
 import stocks.model.selenium.CBTradingview;
 import stocks.model.selenium.ChromeBot;
 import stocks.model.selenium.CBTradingview.Info;
 import stocks.model.system.Hotkey;
-import stocks.model.system.Stock;
 import stocks.model.utilities.UFilings;
 import stocks.model.utilities.UIntegers;
 import stocks.model.utilities.ULoggings;
 import stocks.model.utilities.USort;
+import stocks.model.utilities.USort.SortOrder;
 
 public class Test1 {
 
@@ -35,20 +35,20 @@ public class Test1 {
     //stocktwits info
     static List<String> watchers = new ArrayList<String>();
     // tradingview info
-    static Map<Info, String> tradingivewInfo = null;
     static List<Map<Info, String>> stocks = new ArrayList<Map<Info, String>>();
 
     /* Seperated info */
-    static List<String> names = new ArrayList<String>();
-    static List<Double> volumes = new ArrayList<Double>();
-    static List<Double> volumeRevenues = new ArrayList<Double>();
-    static List<Double> shares = new ArrayList<Double>();
-    static List<Double> employees = new ArrayList<Double>();
-    static List<Double> lasts = new ArrayList<Double>();
-    static List<Double> procentages = new ArrayList<Double>();
-    static List<Double> mkts = new ArrayList<Double>();
-    static List<Double> highs = new ArrayList<Double>();
-    static List<Double> highDrops = new ArrayList<Double>();
+    static Map<String, String> names = new LinkedHashMap<String, String>();
+    static Map<String, Double> volumes = new LinkedHashMap<String, Double>();
+    static Map<String, Double> volumeRevenues = new LinkedHashMap<String, Double>();
+    static Map<String, Double> shares = new LinkedHashMap<String, Double>();
+    static Map<String, Double> employees = new LinkedHashMap<String, Double>();
+    static Map<String, Double> lasts = new LinkedHashMap<String, Double>();
+    static Map<String, Double> procentages = new LinkedHashMap<String, Double>();
+    static Map<String, Double> mkts = new LinkedHashMap<String, Double>();
+    static Map<String, Double> highs = new LinkedHashMap<String, Double>();
+    static Map<String, Double> differenceFromHigh = new LinkedHashMap<String, Double>();
+    
 
 
     public static void main(String[] args) throws IOException, Exception {
@@ -73,7 +73,6 @@ public class Test1 {
 	    getInfo();
 	    fixInfo();
 	    sortInfo();
-	    printInfo();
 	}
 	, NativeKeyEvent.VC_F2);
 
@@ -95,7 +94,7 @@ public class Test1 {
 
 
 
-
+	//https://www.youtube.com/watch?v=YDRNMAJo0MA&ab_channel=blondiebytesblondiebytes
     }
 
 
@@ -128,7 +127,7 @@ public class Test1 {
 		element.click();
 
 		Thread.sleep(100);
-		tradingivewInfo = CBTradingview.getStockInfo
+		    Map<Info, String> tradingivewInfo = CBTradingview.getStockInfo
 			(
 				tradingviewBot,
 				Info.NAME,
@@ -164,75 +163,108 @@ public class Test1 {
     }
 
     static void fixInfo() {
+	
+	
+	Color[] colors = new Color[] {
+		Colors.SILVER.getColorValue(),
+		Colors.GRAY.getColorValue(),
+		Colors.WHITE.getColorValue(),
+		Colors.MAROON.getColorValue(),
+		Colors.RED.getColorValue(),
+		Colors.PURPLE.getColorValue(),
+		Colors.FUCHSIA.getColorValue(),
+		Colors.GREEN.getColorValue(),
+		Colors.LIME.getColorValue(),
+		Colors.OLIVE.getColorValue(),
+		Colors.YELLOW.getColorValue(),
+		Colors.NAVY.getColorValue(),
+		Colors.BLUE.getColorValue(),
+		Colors.TEAL.getColorValue(),
+		Colors.AQUA.getColorValue()
+	};
 
-	for(Map<Info, String> information : stocks) {
-	    for (Map.Entry<Info, String> entry : information.entrySet()) {
+	int i = 0;
+	int count = 1;
+	for(Map<Info, String> stockDataMap : stocks) {
+	    for (Map.Entry<Info, String> entry : stockDataMap.entrySet()) {
 		
-		// color
+		// List distinctColors = getDistinctColors(int amount = stocks.size());
+		
+		/* 20 distinct + black/white distinct colors.
+		 * 
+		 * 			      Column
+		 * times numbers like, (#number)ColoredText.
+		 * 
+		 */
 
 		if(entry.getKey().name().equals("NAME")) {
-		    names.add(entry.getValue());
+		    names.put("(#"+count+")" + colors[i].asHex(), entry.getValue());
+		    
+		// map.put (color, value)
+		
 		} else if (entry.getKey().name().equals("MKT")) {
-		    mkts.add(UIntegers.unfoldIntoNumber(entry.getValue()));
+		    volumes.put("(#"+count+")" + colors[i].asHex(), UIntegers.unfoldIntoNumber(entry.getValue()));
 		} else if (entry.getKey().name().equals("VOL")) {
-		    mkts.add(UIntegers.unfoldIntoNumber(entry.getValue()));
+		    highs.put("(#"+count+")" + colors[i].asHex(), UIntegers.unfoldIntoNumber(entry.getValue()));
 		} else if (entry.getKey().name().equals("LAST")) {
-		    mkts.add(UIntegers.unfoldIntoNumber(entry.getValue()));
+		    shares.put("(#"+count+")" + colors[i].asHex(), UIntegers.unfoldIntoNumber(entry.getValue()));
 		} else if (entry.getKey().name().equals("PROCENTAGE")) {
-		    mkts.add(UIntegers.unfoldIntoNumber(entry.getValue().replaceAll("(|)", "")));
+		    employees.put("(#"+count+")" + colors[i].asHex(), UIntegers.unfoldIntoNumber(entry.getValue().replaceAll("(|)", "")));
 		} else if (entry.getKey().name().equals("SHARES")) {
-		    mkts.add(UIntegers.unfoldIntoNumber(entry.getValue()));
+		    lasts.put("(#"+count+")" + colors[i].asHex(), UIntegers.unfoldIntoNumber(entry.getValue()));
 		} else if (entry.getKey().name().equals("EMPLOYEES")) {
-		    mkts.add(UIntegers.unfoldIntoNumber(entry.getValue()));
+		    procentages.put("(#"+count+")" + colors[i].asHex(), UIntegers.unfoldIntoNumber(entry.getValue()));
 		} else if (entry.getKey().name().equals("HIGH")) {
-		    mkts.add(UIntegers.unfoldIntoNumber(entry.getValue()));;
+		    mkts.put("(#"+count+")" + colors[i].asHex(), UIntegers.unfoldIntoNumber(entry.getValue()));
 		}
 
 	    }
 
+	    
+	    if(i == 19) {
+		count++;
+		i = 0;
+		continue;
+	    }
+	    i++;
 	}
+	
+	List<Double> lasts2 = new ArrayList<Double>();
+	List<Double> highs2 = new ArrayList<Double>();
+	List<Double> volumes2 = new ArrayList<Double>();
 
+	for(Map.Entry<String, Double> entry : lasts.entrySet()) lasts2.add(entry.getValue()); 
+	for(Map.Entry<String, Double> entry : highs.entrySet()) highs2.add(entry.getValue()); 
+	for(Map.Entry<String, Double> entry : volumes.entrySet()) volumes2.add(entry.getValue()); 
 
-	for(int i = 0; i < names.size(); i++) {
-	    volumeRevenues.add(volumes.get(i)*lasts.get(i));
-	    highDrops.add(highs.get(i)-lasts.get(i));
+	for(int n = 0; n < lasts2.size(); n++) {
+	    volumeRevenues.put("(#"+count+")" + colors[i].asHex(), volumes2.get(n)*lasts2.get(n));
+	    differenceFromHigh.put("(#"+count+")" + colors[i].asHex(), (highs2.get(n)-lasts2.get(n))/highs2.get(n)*100);
 	}
-
 
     }
 
 
 
     static void sortInfo() {
-
-	Collections.sort(volumes);
-	Collections.sort(volumeRevenues);
-	Collections.sort(shares);
-	Collections.sort(employees);
-	Collections.sort(lasts);
-	Collections.sort(procentages);
-	Collections.sort(mkts);
-	Collections.sort(highs);
-	Collections.sort(highDrops);
-
-	Collections.reverse(shares);
-	highDrops = USort.midPointOutwardSort(highDrops);
 	
+	/* sorting maps */
+	volumes = USort.mapSort(SortOrder.NORMAL, volumes);
+	volumeRevenues = USort.mapSort(SortOrder.NORMAL, volumeRevenues);
+	shares = USort.mapSort(SortOrder.REVERSE, shares);
+	employees = USort.mapSort(SortOrder.NORMAL, employees);
+	lasts = USort.mapSort(SortOrder.NORMAL, lasts);
+	procentages = USort.mapSort(SortOrder.NORMAL, procentages);
+	mkts = USort.mapSort(SortOrder.NORMAL, mkts);
+	highs = USort.mapSort(SortOrder.NORMAL, highs);
+	differenceFromHigh = USort.mapSort(SortOrder.MIDPOINT, differenceFromHigh);
+
     }
 
     static void printInfo() {
-	try {
-	    new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-	} catch (InterruptedException | IOException e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	}
-
-	String out = "";
-
-	//
-
-	System.out.println(out);
+/* 
+ * Springboot
+ */
     }
 
 

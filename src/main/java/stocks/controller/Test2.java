@@ -49,7 +49,7 @@ public class Test2 {
 	    buyBot.close();
 	    System.exit(0); // Terminate program
 	}
-	, NativeKeyEvent.VC_ESCAPE);
+	, NativeKeyEvent.VC_F4);
 
 	//----
 
@@ -71,7 +71,7 @@ public class Test2 {
 
 
 
-
+/*
 
 	el = CBTradingview.getWatchList(tradingviewBot);
 
@@ -114,7 +114,7 @@ public class Test2 {
 	    System.out.print("\n---\n\n");
 	}
 
-
+*/
 
 	buyBot.start(PageLoadStrategy.NORMAL, ChromeBot.USERAGENT, ChromeBot.DEFAULT_WINDOW_SIZE);
 	CBAvanza.loginToAvanza(buyBot);
