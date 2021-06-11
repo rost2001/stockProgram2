@@ -1,5 +1,6 @@
 package stocks.model.utilities;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +41,87 @@ public class UStrings {
 	}
 
 	return wrappedWords;
+    }
+
+    public static String round(String number, int places) {
+	if(!number.contains(".") || places > number.split("\\.")[1].length()) return number;
+
+	if(number.substring(number.length()-1).toLowerCase().contains("T".toLowerCase())
+		||number.substring(number.length()-1).toLowerCase().contains("B".toLowerCase())
+		||number.substring(number.length()-1).toLowerCase().contains("M".toLowerCase())
+		||number.substring(number.length()-1).toLowerCase().contains("K".toLowerCase())
+		)
+	    return number.split("\\.")[0] +"."+ number.split("\\.")[1].substring(0, places) + number.substring(number.length()-1);
+	else
+	    return number.split("\\.")[0] +"."+ number.split("\\.")[1].substring(0, places);
+    }
+    
+    public static String unfoldNumber(String stringInteger) {
+
+	BigDecimal result;
+
+	if (stringInteger.toLowerCase().contains("m")) {
+	    stringInteger = stringInteger.replaceAll("[mM]", "");
+	    result = new BigDecimal(stringInteger);
+	    result = result.multiply(new BigDecimal("1000000"));
+	} else if  (stringInteger.toLowerCase().contains("k")) {
+	    stringInteger = stringInteger.replaceAll("[kK]", "");
+	    result = new BigDecimal(stringInteger);
+	    result = result.multiply(new BigDecimal("1000"));
+	} else if (stringInteger.toLowerCase().contains("b")) {
+	    stringInteger = stringInteger.replaceAll("[bB]", "");
+	    result = new BigDecimal(stringInteger);
+	    result = result.multiply(new BigDecimal("1000000000"));
+	} else if (stringInteger.toLowerCase().contains("t")) {
+	    stringInteger = stringInteger.replaceAll("[tT]", "");
+	    result = new BigDecimal(stringInteger);
+	    result = result.multiply(new BigDecimal("1000000000000"));
+	} else {
+	    result = new BigDecimal(stringInteger);
+	}
+
+	return result.toPlainString();
+    }
+
+    public static String foldNumber(String number) {
+
+	String string = number;
+	if(string.length() < 4) return string;
+	
+	int length;
+
+	// Dot or no dot
+	if (string.contains(".")) {
+	    length = string.split("\\.")[0].length();
+
+	} else {
+	    length = string.length();
+	}
+
+	string = string.replaceAll("\\.", "");
+	int places = length/3; // floored
+	int rest = length - places*3; // ex: 7/3 = 1 in rest, 8/3 = 2 in rest 9/3 = 0 in rest
+
+	// Move the "." every 3*places
+	if (rest == 0) { 
+	     string = string.substring(0,3)+"."+string.substring(3);
+	     places-=1;
+	} else {
+	     string = string.substring(0,rest)+"."+string.substring(rest);
+	}
+
+	// Add T,B,M,K at end
+	if (places == 4) {
+	    string += "T";
+	} else if(places == 3) {
+	    string += "B";
+	} else if(places == 2) {
+	    string += "M";
+	} else if(places == 1) {
+	    string += "K";
+	}
+	
+	return string;
     }
 
 }

@@ -29,8 +29,14 @@ public class CBTradingview {
 
 
 	// sign in
-	el = bot.findElements("//a[contains(@class,'tv-header__link tv-header__link--signin js-header__signin')]");
+	el = bot.findElements("//button[contains(@class,'tv-header__user-menu-button tv-header__user-menu-button--anonymous js-header-user-menu-button js-header-user-menu-button-anonymous')]");
 	el.get(0).click();
+	
+	
+	
+	el = bot.findElements("//div[contains(@class,'item-2IihgTnv item-2JejeVuV item-PoBSqYYZ withIcon-2IihgTnv withIcon-2JejeVuV')]");
+	el.get(0).click();
+	
 
 	// email
 	el = bot.findElements("//span[contains(@class,'tv-signin-dialog__social tv-signin-dialog__toggle-email js-show-email')]");

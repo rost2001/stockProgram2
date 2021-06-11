@@ -49,7 +49,7 @@ public class Test2 {
 	    buyBot.close();
 	    System.exit(0); // Terminate program
 	}
-	, NativeKeyEvent.VC_F4);
+	, NativeKeyEvent.VC_F6);
 
 	//----
 
@@ -69,52 +69,6 @@ public class Test2 {
 			, "tradingviewPassword").get(0)
 		);
 
-
-
-/*
-
-	el = CBTradingview.getWatchList(tradingviewBot);
-
-	Map<Info, String> info = null;
-	List<Map<Info, String>> stocksInfo = new ArrayList<Map<Info, String>>();
-
-	for (WebElement element : el) {
-	    element.click();
-
-	    Thread.sleep(500);
-	    info = CBTradingview.getStockInfo
-		    (
-			    tradingviewBot,
-			    Info.NAME,
-			    Info.PROCENTAGE, 
-			    Info.LAST, 
-			    Info.VOL, 
-			    Info.SHARES, 
-			    Info.MKT, 
-			    Info.EMPLOYEES
-			    );
-
-	    stocksInfo.add(info);
-	}
-
-
-	List<String> watchers = new ArrayList<String>();
-
-	for(Map<Info, String> information : stocksInfo) {
-	    for (Map.Entry<Info, String> entry : information.entrySet()) {
-
-		if(entry.getKey().name().equals("NAME")) {
-		    watchers.add(CBStocktwits.getWatchers(stocktwitsBot, entry.getValue()));
-		    System.out.println("Watchers: " + watchers.get(watchers.size()-1));
-		}
-
-		System.out.print(entry.getKey().name() + ": ");
-		System.out.println(entry.getValue());
-	    }
-	    System.out.print("\n---\n\n");
-	}
-
-*/
 
 	buyBot.start(PageLoadStrategy.NORMAL, ChromeBot.USERAGENT, ChromeBot.DEFAULT_WINDOW_SIZE);
 	CBAvanza.loginToAvanza(buyBot);
