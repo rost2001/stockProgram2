@@ -6,9 +6,9 @@ import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 
 // Extra functions for AWT Robot klassen, and to help with limiting duplicating code;
-public class RobotAwt extends java.awt.Robot {
+public class SRobot extends java.awt.Robot {
 
-	public RobotAwt() throws AWTException {
+	public SRobot() throws AWTException {
 		super();
 		// TODO Auto-generated constructor stub
 	}

@@ -15,8 +15,8 @@ import stocks.model.selenium.CBStocktwits;
 import stocks.model.selenium.CBTradingview;
 import stocks.model.selenium.CBTradingview.Info;
 import stocks.model.selenium.ChromeBot;
-import stocks.model.system.Hotkey;
-import stocks.model.system.Stock;
+import stocks.model.system.SHotkey;
+import stocks.model.system.SStock;
 import stocks.model.utilities.UFilings;
 import stocks.model.utilities.ULoggings;
 
@@ -42,7 +42,7 @@ public class Test2 {
 	//----
 	//----
 
-	Hotkey h2 = new Hotkey(() -> 
+	SHotkey h2 = new SHotkey(() -> 
 	{
 	    tradingviewBot.close();
 	    stocktwitsBot.close();
@@ -74,20 +74,11 @@ public class Test2 {
 	CBAvanza.loginToAvanza(buyBot);
 
 
-	Stock.checkSymbol(1000, currentSymbol, (String newSymbol) -> 
+	SStock.checkSymbol(1000, currentSymbol, (String newSymbol) -> 
 	{
 	    currentSymbol.delete(0, currentSymbol.length());
 	    currentSymbol.append(newSymbol);
-	    buyBot.driver.get("https://www.avanza.se/ab/sok/inline?query=" + newSymbol);
-
-
-	    try {
-		el = buyBot.findElements("//a");
-	    } catch (Exception e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	    }
-	    el.get(1).sendKeys(Keys.ENTER);
+	    CBAvanza.getStockBuyPage(buyBot, newSymbol);
 	});
 
 

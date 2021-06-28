@@ -61,24 +61,29 @@ public class USort {
 	return result;
     }
 
+    /* Sorting from middle and outwards,
+     * if even: 7,6 8,5 9,4 10,3 11,2 12,1
+     * Or if odd: 7, 8,6 9,5 10,4 11,3 12,2 13,1 
+     * 
+     */
     public static <T> List<T> midPointOutwardSort(List<T> list){
 	List<T> result = new ArrayList<T>();
 
-	if ( (list.size() & 1) == 0 ) 
+	if ( (list.size() & 1) == 0 ) // even
 	{ 
 	    for(int i = 0; i < (list.size()/2); i++) 
-	    {
-		result.add(list.get(list.size()/2+i));
-		result.add(list.get(list.size()/2-i-1));
+	    {		// no number in middle
+		result.add(list.get(list.size()/2+i)); // middle + i 
+		result.add(list.get(list.size()/2-i-1)); // middle - 1 - i
 	    }
 	} 
-	else 
+	else // odd
 	{ 
-	    result.add(list.get((list.size()-1)/2));
-	    for(int i = 0; i < ((list.size()-1)/2); i++) 
+	    result.add(list.get((list.size()-1)/2)); // middle number
+	    for(int i = 0; i < ((list.size()-1)/2); i++) // for each number from middle
 	    {
-		result.add(list.get((list.size()-1)/2+i+1));
-		result.add(list.get((list.size()-1)/2-i-1));
+		result.add(list.get((list.size()-1)/2+i+1)); // middle + 1 + i
+		result.add(list.get((list.size()-1)/2-i-1)); // middle - 1 - i
 	    }
 	}
 

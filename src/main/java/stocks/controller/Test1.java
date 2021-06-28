@@ -23,7 +23,7 @@ import stocks.model.selenium.CBStocktwits;
 import stocks.model.selenium.CBTradingview;
 import stocks.model.selenium.ChromeBot;
 import stocks.model.selenium.CBTradingview.Info;
-import stocks.model.system.Hotkey;
+import stocks.model.system.SHotkey;
 import stocks.model.utilities.UFilings;
 import stocks.model.utilities.ULoggings;
 import stocks.model.utilities.USort;
@@ -77,7 +77,7 @@ public class Test1{
 	ULoggings.disableSlf4j();
 	//Thread.sleep(10000);
 
-	new Hotkey(() -> 
+	new SHotkey(() -> 
 	{
 	    tradingviewBot.close();
 	    stocktwitsBot.close();

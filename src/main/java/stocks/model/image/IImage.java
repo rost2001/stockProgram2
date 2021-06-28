@@ -10,12 +10,12 @@ import java.io.File;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
 import net.sourceforge.tess4j.util.LoadLibs;
-import stocks.model.system.RobotAwt;
+import stocks.model.system.SRobot;
 
 
 
 // Currently a Class for doing stuff with images
-public class Image {
+public class IImage {
 
 
     public static double getPriceAtMouse() {
@@ -23,10 +23,10 @@ public class Image {
 	int x = mouseInfo.x;
 	int y = mouseInfo.y;
 
-	RobotAwt bot;
+	SRobot bot;
 	BufferedImage screenshot = null;
 	try {
-	    bot = new RobotAwt();
+	    bot = new SRobot();
 	    screenshot = bot.takeScreenshot();
 	} catch (AWTException | InterruptedException e) {
 	    // TODO Auto-generated catch block
@@ -57,8 +57,8 @@ public class Image {
     // Crops an image out of the base image between 2 other smaller images horizontally
     public static BufferedImage cropBetweenImagesHorizontal(BufferedImage baseImg, BufferedImage img1, BufferedImage img2) {
 
-	int [] result1 = Image.checkForImage(baseImg, img1);
-	int [] result2 = Image.checkForImage(baseImg, img2);
+	int [] result1 = IImage.checkForImage(baseImg, img1);
+	int [] result2 = IImage.checkForImage(baseImg, img2);
 	//System.out.println("img1: x: " + result1[0] + " y: " + result1[1]);
 	//System.out.println("img2: x: " + result2[0] + " y: " + result2[1]);
 

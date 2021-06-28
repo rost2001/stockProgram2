@@ -8,13 +8,11 @@ import java.util.Map;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
-import stocks.model.system.RobotAwt;
+import stocks.model.system.SRobot;
 
 public class CBTradingview {
 
     private CBTradingview(){}
-
-
 
     public static void login(ChromeBot bot, String email, String password) throws Exception {
 	bot.get("https://www.tradingview.com/");
@@ -29,12 +27,12 @@ public class CBTradingview {
 
 
 	// sign in
-	el = bot.findElements("//button[contains(@class,'tv-header__user-menu-button tv-header__user-menu-button--anonymous js-header-user-menu-button js-header-user-menu-button-anonymous')]");
+	el = bot.findElements("//button[contains(@class,'tv-header__user-menu-button tv-header__user-menu-button--anonymous js-header-user-menu-button')]");
 	el.get(0).click();
 	
 	
 	
-	el = bot.findElements("//div[contains(@class,'item-2IihgTnv item-2JejeVuV item-PoBSqYYZ withIcon-2IihgTnv withIcon-2JejeVuV')]");
+	el = bot.findElements("//div[contains(@class,'label-2IihgTnv')]");
 	el.get(0).click();
 	
 
@@ -152,7 +150,7 @@ public class CBTradingview {
 	}
 
 	Thread.sleep(2000);
-	RobotAwt botAwt = new RobotAwt();
+	SRobot botAwt = new SRobot();
 	botAwt.mouseMove(500, 500, 20);
 	for(int i = 0; i < (numberOfStocks/150 - 1); i++) {
 	    botAwt.mouseWheel(100);
@@ -199,13 +197,13 @@ public class CBTradingview {
 	String xpathprocentage = "//span[contains(@class,'change-3PT2D-PK')]";
 	String xpathInfoButton = "//button[contains(@class,'button-29Bh2ACj button-XCmieq1Q')]";
 	String xpathshares = "//span[contains(@class,'data-3iXCXbow')]";
-	String xpathemployees ="//span[contains(@class,'data-3iXCXbow')]";
+	String xpathEmployeesTitle = "//span[contains(@class,'title-3iXCXbow')]";
 	String xpathName = "//span[contains(@class,'title-2ahQmZbQ')]";
 	String xpathHigh = "//span[contains(@class,'price-1c6h-6Rx')]";
 
-	String xpathEmployeesTitle = "//span[contains(@class,'title-3iXCXbow')]";
-	List<WebElement> el = new ArrayList<WebElement>();
-	Map<Info, String> map = new LinkedHashMap<Info, String>();
+
+	List<WebElement> el = new ArrayList<WebElement>(); // temp list for elements
+	Map<Info, String> map = new LinkedHashMap<Info, String>(); // map to be return
 
 	for (Info type : types) {
 	    if(type.name().equals(Info.MKT.name())) {
@@ -232,24 +230,24 @@ public class CBTradingview {
 	    } else if (type.name().equals(Info.SHARES.name())) {
 		bot.findElements(xpathInfoButton).get(0).click();
 		el = bot.findElements(xpathshares);
-		if(el.size() < 7) {
+		if(el.size() < 7) { // sometimes it needs to press a button to show
 		    bot.findElements(xpathInfoButton).get(0).click();
 		    el = bot.findElements(xpathshares);
 		}
-		if (el.size() != 0)
+		if (el.size() != 0) // Sometimes there is no shares element
 		    map.put(type, el.get(6).getAttribute("innerText"));
 
 	    } else if (type.name().equals(Info.EMPLOYEES.name())) {
 		el = bot.findElements(xpathshares);
 
 		List<WebElement> el2 = bot.findElements(xpathEmployeesTitle);
-		for(WebElement element : el2){
+		for(WebElement element : el2){ // check if it exist by the word "Employees"
 		    if(element.getAttribute("innerText").toLowerCase().contains("Employees".toLowerCase())) {
 
-			if(el.size() > 6) {
+			if(el.size() > 6) { // If button for more info is clicked then the index is different
 			    map.put(type, el.get(8).getAttribute("innerText"));
 
-			} else if (el.size() != 0)
+			} else if (el.size() != 0) 
 			    map.put(type, el.get(5).getAttribute("innerText"));
 		    }
 		}

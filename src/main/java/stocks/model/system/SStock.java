@@ -9,7 +9,8 @@ import com.sun.jna.platform.win32.WinDef.HWND;
 
 import yahoofinance.quotes.query1v7.StockQuotesQuery1V7Request;
 
-public class Stock{
+public class SStock{
+   
 
     static {
 	System.setProperty("yahoofinance.baseurl.quotesquery1v7", "https://query1.finance.yahoo.com/v7/finance/quote");

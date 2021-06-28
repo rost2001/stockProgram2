@@ -2,7 +2,7 @@ package stocks.model.image;
 
 import java.awt.Color;
 
-public class Colors {
+public class IColors {
 
     enum ColorType{
 	NORMAL,

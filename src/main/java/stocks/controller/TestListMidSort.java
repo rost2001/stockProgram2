@@ -24,7 +24,7 @@ public class TestListMidSort {
 	list.add(12);
 	
 	// even/odd
-	//list.add(13);
+	list.add(13);
 	
 	list = USort.midPointOutwardSort(list);
 	
