@@ -1,5 +1,6 @@
 package stocks.model.selenium;
 
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -7,6 +8,8 @@ import java.util.concurrent.TimeUnit;
 import org.awaitility.Awaitility;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
+
+import stocks.model.system.SRobot;
 
 public class CBAvanza {
     
@@ -30,6 +33,12 @@ public class CBAvanza {
 	    //el = bot.findElements("//button[contains(@class,'aza-button cta-secondary')]");
 	    el = bot.findElements("//button[contains(@class,'aza-button aza-cta-button ng-star-inserted')]");
 	    el.get(1).sendKeys(Keys.ENTER);
+	    
+	    // accepts the notification popup asking to open bankid
+	    Thread.sleep(500);
+	    SRobot robot = new SRobot();
+	    robot.keyPress(KeyEvent.VK_LEFT, 20);
+	    robot.keyPress(KeyEvent.VK_ENTER, 20);
 
  	    // Kollar sidan efter inloggning
 	    Awaitility.await().atMost(30, TimeUnit.SECONDS).until(() -> {

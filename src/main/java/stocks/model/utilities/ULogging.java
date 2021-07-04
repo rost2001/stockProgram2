@@ -6,7 +6,7 @@ import java.util.logging.Logger;
 
 import org.jnativehook.GlobalScreen;
 
-public class ULoggings {
+public class ULogging {
 
     // For yahoo requests
     public static void disableSlf4j() {

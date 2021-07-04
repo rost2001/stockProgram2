@@ -1,4 +1,4 @@
-package stocks.model.selenium;
+package stocks.controller;
 
 
 import java.awt.AWTException;
@@ -24,7 +24,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-import stocks.model.utilities.ULoggings;
+import stocks.model.selenium.ChromeBot;
+import stocks.model.utilities.ULogging;
 
 
 public class TestCB implements NativeKeyListener{
@@ -47,7 +48,7 @@ public class TestCB implements NativeKeyListener{
     public static void main(String[] args) throws IOException, InterruptedException, AWTException {
 
 	//-------------------------------------------------------
-	ULoggings.disableKeyLogging();
+	ULogging.disableKeyLogging();
 
 
 	try {

@@ -7,7 +7,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UFilings {
+public class UFiling {
 
 
     /* Reading a file and parses it.

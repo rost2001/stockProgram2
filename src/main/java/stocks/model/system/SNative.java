@@ -2,7 +2,7 @@ package stocks.model.system;
 
 
 
-import static stocks.model.system.WindowsNative.User32DLL.*;
+import static stocks.model.system.SNative.User32DLL.*;
 
 import com.sun.jna.Native;
 import com.sun.jna.platform.win32.User32;
@@ -11,7 +11,7 @@ import com.sun.jna.platform.win32.WinDef.HWND;
 import com.sun.jna.ptr.PointerByReference;
 
 
-public class WindowsNative {
+public class SNative {
 	
 	private static final int MAX_TITLE_LENGTH = 1024;
 

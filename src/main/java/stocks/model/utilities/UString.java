@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.openqa.selenium.WebElement;
 
-public class UStrings {
+public class UString {
 
     /* Removes unwanted strings from a list of strings.
      * */

@@ -24,11 +24,11 @@ import stocks.model.selenium.CBTradingview;
 import stocks.model.selenium.ChromeBot;
 import stocks.model.selenium.CBTradingview.Info;
 import stocks.model.system.SHotkey;
-import stocks.model.utilities.UFilings;
-import stocks.model.utilities.ULoggings;
+import stocks.model.utilities.UFiling;
+import stocks.model.utilities.ULogging;
 import stocks.model.utilities.USort;
 import stocks.model.utilities.USort.SortOrder;
-import stocks.model.utilities.UStrings;
+import stocks.model.utilities.UString;
 
 @SpringBootApplication
 @RestController
@@ -73,8 +73,8 @@ public class Test1{
 
 	SpringApplication.run(Test1.class, args);
 
-	ULoggings.disableKeyLogging();
-	ULoggings.disableSlf4j();
+	ULogging.disableKeyLogging();
+	ULogging.disableSlf4j();
 	//Thread.sleep(10000);
 
 	new SHotkey(() -> 
@@ -97,8 +97,8 @@ public class Test1{
 	tradingviewBot.start(PageLoadStrategy.EAGER, ChromeBot.USERAGENT, ChromeBot.DEFAULT_WINDOW_SIZE);
 	tradingviewBot.maximizeWindow();
 
-	String tradingviewUsername = UFilings.readFile(System.getProperty("user.dir") + "\\src\\main\\resources\\FileStorage\\" + "Credentials.txt", "tradingviewUsername").get(0);
-	String tradingviewPassword = UFilings.readFile(System.getProperty("user.dir") + "\\src\\main\\resources\\FileStorage\\" + "Credentials.txt", "tradingviewPassword").get(0);
+	String tradingviewUsername = UFiling.readFile(System.getProperty("user.dir") + "\\src\\main\\resources\\FileStorage\\" + "Credentials.txt", "tradingviewUsername").get(0);
+	String tradingviewPassword = UFiling.readFile(System.getProperty("user.dir") + "\\src\\main\\resources\\FileStorage\\" + "Credentials.txt", "tradingviewPassword").get(0);
 	CBTradingview.login(tradingviewBot, tradingviewUsername, tradingviewPassword);
 
 
@@ -117,7 +117,6 @@ public class Test1{
 
     static void getInfo(){
 	try {
-
 	    // Info from tradingview chart page
 	    el = CBTradingview.getWatchList(tradingviewBot);
 
@@ -195,31 +194,31 @@ public class Test1{
 		    names.put(colors[i].asHex(), entry.getValue());
 
 		} else if (entry.getKey().name().equals("MKT")) {
-		    BigDecimal mk = new BigDecimal(UStrings.unfoldNumber(entry.getValue().replace("—", "0")));
+		    BigDecimal mk = new BigDecimal(UString.unfoldNumber(entry.getValue().replace("—", "0")));
 		    mkts.put(colors[i].asHex(), mk);
 
 		} else if (entry.getKey().name().equals("VOL")) {
-		    BigDecimal vol = new BigDecimal(UStrings.unfoldNumber(entry.getValue()));
+		    BigDecimal vol = new BigDecimal(UString.unfoldNumber(entry.getValue()));
 		    volumes.put(colors[i].asHex(), vol);
 
 		} else if (entry.getKey().name().equals("LAST")) {
-		    BigDecimal la = new BigDecimal(UStrings.unfoldNumber(entry.getValue()));
+		    BigDecimal la = new BigDecimal(UString.unfoldNumber(entry.getValue()));
 		    lasts.put(colors[i].asHex(), la);
 
 		} else if (entry.getKey().name().equals("PROCENTAGE")) {
-		    BigDecimal proc = new BigDecimal(UStrings.unfoldNumber(entry.getValue().replaceAll("[()%]", "")));
+		    BigDecimal proc = new BigDecimal(UString.unfoldNumber(entry.getValue().replaceAll("[()%]", "")));
 		    procentages.put(colors[i].asHex(), proc);
 
 		} else if (entry.getKey().name().equals("SHARES")) {
-		    BigDecimal sh = new BigDecimal(UStrings.unfoldNumber(entry.getValue().replace("—", "0")));
+		    BigDecimal sh = new BigDecimal(UString.unfoldNumber(entry.getValue().replace("—", "0")));
 		    shares.put(colors[i].asHex(), sh);
 
 		} else if (entry.getKey().name().equals("EMPLOYEES")) {
-		    BigDecimal emp = new BigDecimal(UStrings.unfoldNumber(entry.getValue().replace("—", "0")));
+		    BigDecimal emp = new BigDecimal(UString.unfoldNumber(entry.getValue().replace("—", "0")));
 		    employees.put(colors[i].asHex(), emp);
 
 		} else if (entry.getKey().name().equals("HIGH")) {
-		    BigDecimal hi = new BigDecimal(UStrings.unfoldNumber(entry.getValue()));
+		    BigDecimal hi = new BigDecimal(UString.unfoldNumber(entry.getValue()));
 		    highs.put(colors[i].asHex(), hi);
 		}
 
@@ -450,17 +449,17 @@ public class Test1{
 		} else if (i == 6) {
 
 		    str += "	<tr>\r\n" + 
-			    "	<td style=\"color:"+entry.getKey()+"\">"+UStrings.round(UStrings.foldNumber(((BigDecimal)entry.getValue()).toPlainString()),2)+"%"+"</td>\r\n" + 
+			    "	<td style=\"color:"+entry.getKey()+"\">"+UString.round(UString.foldNumber(((BigDecimal)entry.getValue()).toPlainString()),2)+"%"+"</td>\r\n" + 
 			    "	</tr>";
 		} else if (i == 9) {
 
 		    str += "	<tr>\r\n" + 
-			    "	<td style=\"color:"+entry.getKey()+"\">"+"-"+UStrings.round(UStrings.foldNumber(((BigDecimal)entry.getValue()).toPlainString()),2)+"%"+"</td>\r\n" + 
+			    "	<td style=\"color:"+entry.getKey()+"\">"+"-"+UString.round(UString.foldNumber(((BigDecimal)entry.getValue()).toPlainString()),2)+"%"+"</td>\r\n" + 
 			    "	</tr>";
 		} else {
 
 		    str += "	<tr>\r\n" + 
-			    "	<td style=\"color:"+entry.getKey()+"\">"+UStrings.round(UStrings.foldNumber(((BigDecimal)entry.getValue()).toPlainString()),2)+"</td>\r\n" + 
+			    "	<td style=\"color:"+entry.getKey()+"\">"+UString.round(UString.foldNumber(((BigDecimal)entry.getValue()).toPlainString()),2)+"</td>\r\n" + 
 			    "	</tr>";
 		}
 	    }

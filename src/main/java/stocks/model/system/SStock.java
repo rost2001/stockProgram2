@@ -55,8 +55,8 @@ public class SStock{
 
 		    double newPrice = 0;
 
-		    HWND activeWindow = WindowsNative.getActiveWindow();
-		    String windowTitle = WindowsNative.getActiveWindowTitle(activeWindow);
+		    HWND activeWindow = SNative.getActiveWindow();
+		    String windowTitle = SNative.getActiveWindowTitle(activeWindow);
 
 		    // Difference of chorme window and desktop tradingview app
 		    if (tradingviewData && windowTitle.contains("% Unnamed") && symbol.toString().equalsIgnoreCase(windowTitle.split(" ")[0])) {
@@ -98,7 +98,7 @@ public class SStock{
     public interface OnUpdatedSymbol {
 	void run(String str);
     }
-    public static Map<Timer, TimerTask> checkSymbol(int time, StringBuffer symbol, OnUpdatedSymbol function) {
+    public static Map<Timer, TimerTask> checkSymbol(int time, StringBuffer currentSymbol, OnUpdatedSymbol function) {
 
 	Timer timer = new Timer();
 	TimerTask task = new TimerTask() {
@@ -106,13 +106,17 @@ public class SStock{
 	    public void run() {
 		//----------------------------------------------------------
 		try {
-		    HWND activeWindow = WindowsNative.getActiveWindow();
-		    String windowTitle = WindowsNative.getActiveWindowTitle(activeWindow);
+		    HWND activeWindow = SNative.getActiveWindow();
+		    String windowTitle = SNative.getActiveWindowTitle(activeWindow);
 
 		    if (windowTitle.contains("% Unnamed") || windowTitle.contains("% / Unnamed")) {
 
-			if (!symbol.toString().equalsIgnoreCase(windowTitle.split(" ")[0])) {
+			if (!currentSymbol.toString().equalsIgnoreCase(windowTitle.split(" ")[0])) {
 			    String newSymbol = windowTitle.split(" ")[0];
+			    
+			    currentSymbol.delete(0, currentSymbol.length());
+			    currentSymbol.append(newSymbol);
+			    
 			    function.run(newSymbol); 
 
 			}

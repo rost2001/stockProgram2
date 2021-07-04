@@ -41,7 +41,7 @@ public class MainYahooTest {
 		long startTime = 0;
 		long estimatedTime = 0;
 		List<HistoricalQuote> googleHistQuotes = null;
-		for(int i = 0; i < 20; i++) {
+		for(int i = 0; i < 1; i++) {
 		startTime = System.currentTimeMillis();
 		googleHistQuotes = google.getHistory(from, to, Interval.DAILY);
 		estimatedTime = System.currentTimeMillis() - startTime;
@@ -52,10 +52,7 @@ public class MainYahooTest {
 		for(Long time : times)
 		System.out.println("ms: **" + time);
 
-		/*	DATE
-		 *	DATA 1 LINE->>> 
-		 * 	FREE LINE
-		 */
+	
 		
 		google.getStats().getShortRatio();
 		google.getStats().getSharesFloat();
@@ -63,13 +60,7 @@ public class MainYahooTest {
 		google.getStats().getBookValuePerShare();
 		google.getQuote().getVolume();
 
-		/*
-		 * Vol relative , so vol divided by shares = relative vol and vol times shares = oms�ttning
-		 * Market cap at 1 dollar, so 1 dollar * shares = market cap normal, and actual market cap divided by that normal = market cap relative, show market cap and normal and relative   
-		 * ranges of below 300-1000 above
-		 * If number of shares is more than marketcap, oms�ttning(vol) compared to marketcap how many times is it traded whole, average vol compared to mkt
-		 * Point system, +1 for anything that makes it easier to trade or better in some way, -1 for anything hard and risky
-		 */
+
 
 		for(int i = 0; i < googleHistQuotes.size() ;i++) {
 		    System.out.println(i);

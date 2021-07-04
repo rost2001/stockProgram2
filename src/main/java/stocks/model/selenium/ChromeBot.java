@@ -28,7 +28,7 @@ public class ChromeBot {
     public final static String DEFAULT_WINDOW_SIZE = "window-size=1050,1000"; // size used when I selected xpaths, may not work if other size
 
 
-    
+
     // Options used in current instance, koma ih�g ifall om det beh�vs en omstart
     String[] options;
 
@@ -49,14 +49,14 @@ public class ChromeBot {
      * @throws IOException
      */
     public void start(PageLoadStrategy type, String... chromeOptions) {
-	    
+
 	options = chromeOptions;
 
 	// l�gger till options
 	ChromeOptions options = new ChromeOptions();
 	for (String option : chromeOptions)
 	    options.addArguments(option);
-	
+
 	options.setPageLoadStrategy(type);
 
 	// Startar drivrutinen och skickar dom parameterna till chrome
@@ -111,13 +111,13 @@ public class ChromeBot {
 
     //  https://www.w3schools.com/tags/ref_attributes.asp
     public void modifyElement(WebElement element, String functionCall, String attr, String value) {
-	
+
 	JavascriptExecutor js = (JavascriptExecutor) this.driver;
 	js.executeScript("arguments[0]."+functionCall+"('"+attr+"', '"+value+"')", element);
     }
 
     public void removeElement(WebElement element) {
-	
+
 	JavascriptExecutor js = (JavascriptExecutor) this.driver;
 	js.executeScript("arguments[0].remove()", element);
     }
@@ -127,6 +127,18 @@ public class ChromeBot {
 	JavascriptExecutor js = (JavascriptExecutor) this.driver;
 	js.executeScript("newElement = document.createElement(\""+elementType+"\");"
 		+ "arguments[0].appendChild(newElement);", parentElement);
+    }
+
+    public void runJavascript(String javascript) {
+	JavascriptExecutor js = (JavascriptExecutor) this.driver;
+	js.executeScript(javascript);
+    }
+
+    /* Opens new tab, and returns the window handle of that tab */
+    public String newTab() {
+	runJavascript("window.open('about:blank','_blank');");
+	List<String> hds = new ArrayList<String>(driver.getWindowHandles());
+	return hds.get(hds.size()-1);
     }
 
     // Gets the text from an element and splits it into words
@@ -154,6 +166,18 @@ public class ChromeBot {
 
     public void maximizeWindow() {
 	this.driver.manage().window().maximize();
+    }
+    
+    public String getHandle() {
+	return driver.getWindowHandle();
+    }
+    
+    public List<String> getHandles(){
+	return new ArrayList<String>(driver.getWindowHandles());
+    }
+    
+    public void switchTo (String handle) {
+	driver.switchTo().window(handle);
     }
 
 }

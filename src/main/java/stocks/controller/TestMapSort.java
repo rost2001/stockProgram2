@@ -6,10 +6,10 @@ import java.math.RoundingMode;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import stocks.model.utilities.UIntegers;
+import stocks.model.utilities.UInteger;
 import stocks.model.utilities.USort;
 import stocks.model.utilities.USort.SortOrder;
-import stocks.model.utilities.UStrings;
+import stocks.model.utilities.UString;
 
 public class TestMapSort {
 
@@ -59,18 +59,18 @@ public class TestMapSort {
 	
 	
 	BigDecimal bd3 = new BigDecimal("12.123");
-	String print2 = UStrings.foldNumber(bd3.toPlainString());
+	String print2 = UString.foldNumber(bd3.toPlainString());
 	System.out.println(print2);
-	System.out.println(UStrings.round(print2, 2));
+	System.out.println(UString.round(print2, 2));
 	System.out.println(print2);
 	
 	
-	print2 = UStrings.unfoldNumber(print2);
-	System.out.println(UStrings.round(print2, 4));
+	print2 = UString.unfoldNumber(print2);
+	System.out.println(UString.round(print2, 4));
 	
 	
-	print2 = UStrings.foldNumber(bd3.toPlainString());
-	System.out.println(UStrings.round(print2, 2));
+	print2 = UString.foldNumber(bd3.toPlainString());
+	System.out.println(UString.round(print2, 2));
     }
     
   
